@@ -1,0 +1,1215 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CartonMohamad_PriceModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="crm_CustomerMarketingActivities">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="J_ID_Customer" Type="int" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="expert_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="next_contact_at" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="customer_grade" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="Descript" Type="text" Nullable="false" />
+          <Property Name="meeting_outcome" Type="bit" Nullable="false" />
+          <Property Name="activity_type" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Customer" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="company_name" Type="nvarchar" MaxLength="100" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="payment_behavior" Type="nvarchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FinalCharges">
+          <Key>
+            <PropertyRef Name="final_charge_id" />
+          </Key>
+          <Property Name="final_charge_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="is_active" Type="bit" Nullable="false" />
+          <Property Name="is_required" Type="bit" Nullable="false" />
+          <Property Name="calc_type" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="priority" Type="smallint" Nullable="false" />
+          <Property Name="apply_on" Type="nvarchar" MaxLength="24" Nullable="false" />
+          <Property Name="percent_rate" Type="decimal" Precision="7" Scale="4" />
+          <Property Name="fixed_amount_irr" Type="bigint" />
+        </EntityType>
+        <EntityType Name="Info_Compuni">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="J_ID_Customer" Type="int" Nullable="false" />
+          <Property Name="address_factory" Type="varchar" MaxLength="500" />
+          <Property Name="address_sales_office" Type="varchar" MaxLength="500" />
+          <Property Name="address_warehouse" Type="varchar" MaxLength="500" />
+          <Property Name="address_dispatch" Type="varchar" MaxLength="500" />
+          <Property Name="phone_factory" Type="varchar" MaxLength="20" />
+          <Property Name="phone_sales_office" Type="varchar" MaxLength="20" />
+          <Property Name="phone_procurement_manager" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="OverheadCosts">
+          <Key>
+            <PropertyRef Name="overhead_id" />
+          </Key>
+          <Property Name="overhead_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="is_required" Type="bit" Nullable="false" />
+          <Property Name="calc_method" Type="nvarchar" MaxLength="24" Nullable="false" />
+          <Property Name="quantity" Type="decimal" Precision="12" Scale="3" />
+          <Property Name="qty_per_meter" Type="decimal" Precision="12" Scale="4" />
+          <Property Name="unit_price_irr" Type="bigint" Nullable="false" />
+          <Property Name="show_on_invoice" Type="bit" Nullable="false" />
+          <Property Name="price" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PaperCombos">
+          <Key>
+            <PropertyRef Name="combo_id" />
+          </Key>
+          <Property Name="combo_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="product_id" Type="int" Nullable="false" />
+          <Property Name="combo_name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="combo_kind" Type="nvarchar" MaxLength="12" Nullable="false" />
+          <Property Name="top_liner_paper_id" Type="int" />
+          <Property Name="flute_be_paper_id" Type="int" />
+          <Property Name="middle_paper_id" Type="int" />
+          <Property Name="flute_c_paper_id" Type="int" />
+          <Property Name="bottom_liner_paper_id" Type="int" />
+          <Property Name="is_active" Type="bit" Nullable="false" />
+          <Property Name="notes" Type="nvarchar" MaxLength="300" />
+          <Property Name="created_at" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProductImages">
+          <Key>
+            <PropertyRef Name="image_id" />
+          </Key>
+          <Property Name="image_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="product_id" Type="int" Nullable="false" />
+          <Property Name="file_url" Type="nvarchar" MaxLength="400" Nullable="false" />
+          <Property Name="storage_provider" Type="nvarchar" MaxLength="50" />
+          <Property Name="alt_text" Type="nvarchar" MaxLength="200" />
+          <Property Name="caption" Type="nvarchar" MaxLength="200" />
+          <Property Name="is_primary" Type="bit" Nullable="false" />
+          <Property Name="sort_order" Type="int" Nullable="false" />
+          <Property Name="mime_type" Type="nvarchar" MaxLength="100" />
+          <Property Name="width_px" Type="int" />
+          <Property Name="height_px" Type="int" />
+          <Property Name="size_bytes" Type="bigint" />
+          <Property Name="checksum_sha1" Type="char" MaxLength="40" />
+          <Property Name="created_at" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Products">
+          <Key>
+            <PropertyRef Name="product_id" />
+          </Key>
+          <Property Name="product_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="product_code" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="product_name" Type="nvarchar" MaxLength="120" Nullable="false" />
+          <Property Name="product_type" Type="nvarchar" MaxLength="30" />
+          <Property Name="tirage" Type="int" Nullable="false" />
+          <Property Name="layers_count" Type="tinyint" />
+          <Property Name="pieces_count" Type="tinyint" />
+          <Property Name="door_type" Type="nvarchar" MaxLength="30" />
+          <Property Name="doors_count" Type="tinyint" />
+          <Property Name="length_cm" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="width_cm" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="height_cm" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="sheets_per_order" Type="int" />
+          <Property Name="units_per_sheet" Type="int" />
+          <Property Name="bottoms_per_sheet" Type="int" />
+          <Property Name="flap_total_cm" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="flap_top_cm" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="flap_bottom_cm" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="die_to_die_length_cm" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="mold_width_cm" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="bottoms_per_mold" Type="smallint" />
+          <Property Name="industrial_length_cm" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="industrial_width_cm" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="carton_consumption_m2" Type="decimal" Precision="12" Scale="4" />
+          <Property Name="grammage_gsm" Type="smallint" />
+          <Property Name="industrial_area_m2" Type="numeric" Precision="29" Scale="11" StoreGeneratedPattern="Computed" />
+          <Property Name="flute_type" Type="nvarchar" MaxLength="3" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Tb_Body_Order">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="J_ID_order" Type="bigint" Nullable="false" />
+          <Property Name="J_ID_Production" Type="int" Nullable="false" />
+          <Property Name="final_charge_id" Type="int" />
+          <Property Name="J_id_OverheadCosts" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tb_Catgori">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Categori" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tb_join_Categori_Paper">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="J_ID_Catgori" Type="int" Nullable="false" />
+          <Property Name="J_ID_PAper" Type="int" Nullable="false" />
+          <Property Name="Value" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="type" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tb_Order">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="J_ID_Customer" Type="int" Nullable="false" />
+          <Property Name="Number_order" Type="int" Nullable="false" />
+          <Property Name="J_ID_Facktor" Type="bigint" Nullable="false" />
+          <Property Name="Number_ORder_rahkaran" Type="nvarchar" MaxLength="50" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Date" Type="date" />
+        </EntityType>
+        <EntityType Name="Tb_Paper">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Paper_Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="price_per_sheet" Type="int" />
+          <Property Name="shipping_cost" Type="int" />
+        </EntityType>
+        <Association Name="FK__PaperComb__botto__0E6E26BF">
+          <End Role="Tb_Paper" Type="Self.Tb_Paper" Multiplicity="0..1" />
+          <End Role="PaperCombos" Type="Self.PaperCombos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tb_Paper">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PaperCombos">
+              <PropertyRef Name="bottom_liner_paper_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PaperComb__flute__0B91BA14">
+          <End Role="Tb_Paper" Type="Self.Tb_Paper" Multiplicity="0..1" />
+          <End Role="PaperCombos" Type="Self.PaperCombos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tb_Paper">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PaperCombos">
+              <PropertyRef Name="flute_be_paper_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PaperComb__flute__0D7A0286">
+          <End Role="Tb_Paper" Type="Self.Tb_Paper" Multiplicity="0..1" />
+          <End Role="PaperCombos" Type="Self.PaperCombos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tb_Paper">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PaperCombos">
+              <PropertyRef Name="flute_c_paper_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PaperComb__middl__0C85DE4D">
+          <End Role="Tb_Paper" Type="Self.Tb_Paper" Multiplicity="0..1" />
+          <End Role="PaperCombos" Type="Self.PaperCombos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tb_Paper">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PaperCombos">
+              <PropertyRef Name="middle_paper_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PaperComb__produ__08B54D69">
+          <End Role="Products" Type="Self.Products" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="PaperCombos" Type="Self.PaperCombos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="product_id" />
+            </Principal>
+            <Dependent Role="PaperCombos">
+              <PropertyRef Name="product_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PaperComb__top_l__0A9D95DB">
+          <End Role="Tb_Paper" Type="Self.Tb_Paper" Multiplicity="0..1" />
+          <End Role="PaperCombos" Type="Self.PaperCombos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tb_Paper">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PaperCombos">
+              <PropertyRef Name="top_liner_paper_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProductIm__produ__7A672E12">
+          <End Role="Products" Type="Self.Products" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ProductImages" Type="Self.ProductImages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="product_id" />
+            </Principal>
+            <Dependent Role="ProductImages">
+              <PropertyRef Name="product_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_crm_CustomerMarketingActivities_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="crm_CustomerMarketingActivities" Type="Self.crm_CustomerMarketingActivities" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="crm_CustomerMarketingActivities">
+              <PropertyRef Name="J_ID_Customer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Info_Compuni_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="Info_Compuni" Type="Self.Info_Compuni" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Info_Compuni">
+              <PropertyRef Name="J_ID_Customer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tb_Body_Order_FinalCharges">
+          <End Role="FinalCharges" Type="Self.FinalCharges" Multiplicity="0..1" />
+          <End Role="Tb_Body_Order" Type="Self.Tb_Body_Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FinalCharges">
+              <PropertyRef Name="final_charge_id" />
+            </Principal>
+            <Dependent Role="Tb_Body_Order">
+              <PropertyRef Name="final_charge_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tb_Body_Order_OverheadCosts">
+          <End Role="OverheadCosts" Type="Self.OverheadCosts" Multiplicity="1" />
+          <End Role="Tb_Body_Order" Type="Self.Tb_Body_Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OverheadCosts">
+              <PropertyRef Name="overhead_id" />
+            </Principal>
+            <Dependent Role="Tb_Body_Order">
+              <PropertyRef Name="J_id_OverheadCosts" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tb_Body_Order_Products">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="Tb_Body_Order" Type="Self.Tb_Body_Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="product_id" />
+            </Principal>
+            <Dependent Role="Tb_Body_Order">
+              <PropertyRef Name="J_ID_Production" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tb_Body_Order_Tb_Order">
+          <End Role="Tb_Order" Type="Self.Tb_Order" Multiplicity="1" />
+          <End Role="Tb_Body_Order" Type="Self.Tb_Body_Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tb_Order">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Tb_Body_Order">
+              <PropertyRef Name="J_ID_order" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tb_join_Categori_Paper_Tb_Catgori">
+          <End Role="Tb_Catgori" Type="Self.Tb_Catgori" Multiplicity="1" />
+          <End Role="Tb_join_Categori_Paper" Type="Self.Tb_join_Categori_Paper" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tb_Catgori">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Tb_join_Categori_Paper">
+              <PropertyRef Name="J_ID_Catgori" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tb_join_Categori_Paper_Tb_Paper">
+          <End Role="Tb_Paper" Type="Self.Tb_Paper" Multiplicity="1" />
+          <End Role="Tb_join_Categori_Paper" Type="Self.Tb_join_Categori_Paper" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tb_Paper">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Tb_join_Categori_Paper">
+              <PropertyRef Name="J_ID_PAper" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tb_Order_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="Tb_Order" Type="Self.Tb_Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Tb_Order">
+              <PropertyRef Name="J_ID_Customer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CartonMohamad_PriceModelStoreContainer">
+          <EntitySet Name="crm_CustomerMarketingActivities" EntityType="Self.crm_CustomerMarketingActivities" Schema="dbo" Table="crm.CustomerMarketingActivities" store:Type="Tables" />
+          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FinalCharges" EntityType="Self.FinalCharges" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Info_Compuni" EntityType="Self.Info_Compuni" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OverheadCosts" EntityType="Self.OverheadCosts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PaperCombos" EntityType="Self.PaperCombos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductImages" EntityType="Self.ProductImages" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tb_Body_Order" EntityType="Self.Tb_Body_Order" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tb_Catgori" EntityType="Self.Tb_Catgori" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tb_join_Categori_Paper" EntityType="Self.Tb_join_Categori_Paper" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tb_Order" EntityType="Self.Tb_Order" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tb_Paper" EntityType="Self.Tb_Paper" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__PaperComb__botto__0E6E26BF" Association="Self.FK__PaperComb__botto__0E6E26BF">
+            <End Role="Tb_Paper" EntitySet="Tb_Paper" />
+            <End Role="PaperCombos" EntitySet="PaperCombos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PaperComb__flute__0B91BA14" Association="Self.FK__PaperComb__flute__0B91BA14">
+            <End Role="Tb_Paper" EntitySet="Tb_Paper" />
+            <End Role="PaperCombos" EntitySet="PaperCombos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PaperComb__flute__0D7A0286" Association="Self.FK__PaperComb__flute__0D7A0286">
+            <End Role="Tb_Paper" EntitySet="Tb_Paper" />
+            <End Role="PaperCombos" EntitySet="PaperCombos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PaperComb__middl__0C85DE4D" Association="Self.FK__PaperComb__middl__0C85DE4D">
+            <End Role="Tb_Paper" EntitySet="Tb_Paper" />
+            <End Role="PaperCombos" EntitySet="PaperCombos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PaperComb__produ__08B54D69" Association="Self.FK__PaperComb__produ__08B54D69">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="PaperCombos" EntitySet="PaperCombos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PaperComb__top_l__0A9D95DB" Association="Self.FK__PaperComb__top_l__0A9D95DB">
+            <End Role="Tb_Paper" EntitySet="Tb_Paper" />
+            <End Role="PaperCombos" EntitySet="PaperCombos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProductIm__produ__7A672E12" Association="Self.FK__ProductIm__produ__7A672E12">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="ProductImages" EntitySet="ProductImages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_crm_CustomerMarketingActivities_Customer" Association="Self.FK_crm_CustomerMarketingActivities_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="crm_CustomerMarketingActivities" EntitySet="crm_CustomerMarketingActivities" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Info_Compuni_Customer" Association="Self.FK_Info_Compuni_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Info_Compuni" EntitySet="Info_Compuni" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tb_Body_Order_FinalCharges" Association="Self.FK_Tb_Body_Order_FinalCharges">
+            <End Role="FinalCharges" EntitySet="FinalCharges" />
+            <End Role="Tb_Body_Order" EntitySet="Tb_Body_Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tb_Body_Order_OverheadCosts" Association="Self.FK_Tb_Body_Order_OverheadCosts">
+            <End Role="OverheadCosts" EntitySet="OverheadCosts" />
+            <End Role="Tb_Body_Order" EntitySet="Tb_Body_Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tb_Body_Order_Products" Association="Self.FK_Tb_Body_Order_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Tb_Body_Order" EntitySet="Tb_Body_Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tb_Body_Order_Tb_Order" Association="Self.FK_Tb_Body_Order_Tb_Order">
+            <End Role="Tb_Order" EntitySet="Tb_Order" />
+            <End Role="Tb_Body_Order" EntitySet="Tb_Body_Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tb_join_Categori_Paper_Tb_Catgori" Association="Self.FK_Tb_join_Categori_Paper_Tb_Catgori">
+            <End Role="Tb_Catgori" EntitySet="Tb_Catgori" />
+            <End Role="Tb_join_Categori_Paper" EntitySet="Tb_join_Categori_Paper" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tb_join_Categori_Paper_Tb_Paper" Association="Self.FK_Tb_join_Categori_Paper_Tb_Paper">
+            <End Role="Tb_Paper" EntitySet="Tb_Paper" />
+            <End Role="Tb_join_Categori_Paper" EntitySet="Tb_join_Categori_Paper" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tb_Order_Customer" Association="Self.FK_Tb_Order_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Tb_Order" EntitySet="Tb_Order" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CartonMohamad_PriceModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="CartonMohamad_PriceEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="crm_CustomerMarketingActivities" EntityType="CartonMohamad_PriceModel.crm_CustomerMarketingActivities" />
+          <EntitySet Name="Customers" EntityType="CartonMohamad_PriceModel.Customer" />
+          <EntitySet Name="FinalCharges" EntityType="CartonMohamad_PriceModel.FinalCharge" />
+          <EntitySet Name="Info_Compuni" EntityType="CartonMohamad_PriceModel.Info_Compuni" />
+          <EntitySet Name="OverheadCosts" EntityType="CartonMohamad_PriceModel.OverheadCost" />
+          <EntitySet Name="PaperCombos" EntityType="CartonMohamad_PriceModel.PaperCombo" />
+          <EntitySet Name="ProductImages" EntityType="CartonMohamad_PriceModel.ProductImage" />
+          <EntitySet Name="Products" EntityType="CartonMohamad_PriceModel.Product" />
+          <EntitySet Name="sysdiagrams" EntityType="CartonMohamad_PriceModel.sysdiagram" />
+          <EntitySet Name="Tb_Body_Order" EntityType="CartonMohamad_PriceModel.Tb_Body_Order" />
+          <EntitySet Name="Tb_Catgori" EntityType="CartonMohamad_PriceModel.Tb_Catgori" />
+          <EntitySet Name="Tb_join_Categori_Paper" EntityType="CartonMohamad_PriceModel.Tb_join_Categori_Paper" />
+          <EntitySet Name="Tb_Order" EntityType="CartonMohamad_PriceModel.Tb_Order" />
+          <EntitySet Name="Tb_Paper" EntityType="CartonMohamad_PriceModel.Tb_Paper" />
+          <AssociationSet Name="FK_crm_CustomerMarketingActivities_Customer" Association="CartonMohamad_PriceModel.FK_crm_CustomerMarketingActivities_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="crm_CustomerMarketingActivities" EntitySet="crm_CustomerMarketingActivities" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Info_Compuni_Customer" Association="CartonMohamad_PriceModel.FK_Info_Compuni_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="Info_Compuni" EntitySet="Info_Compuni" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tb_Order_Customer" Association="CartonMohamad_PriceModel.FK_Tb_Order_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="Tb_Order" EntitySet="Tb_Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tb_Body_Order_FinalCharges" Association="CartonMohamad_PriceModel.FK_Tb_Body_Order_FinalCharges">
+            <End Role="FinalCharge" EntitySet="FinalCharges" />
+            <End Role="Tb_Body_Order" EntitySet="Tb_Body_Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tb_Body_Order_OverheadCosts" Association="CartonMohamad_PriceModel.FK_Tb_Body_Order_OverheadCosts">
+            <End Role="OverheadCost" EntitySet="OverheadCosts" />
+            <End Role="Tb_Body_Order" EntitySet="Tb_Body_Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PaperComb__botto__0E6E26BF" Association="CartonMohamad_PriceModel.FK__PaperComb__botto__0E6E26BF">
+            <End Role="Tb_Paper" EntitySet="Tb_Paper" />
+            <End Role="PaperCombo" EntitySet="PaperCombos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PaperComb__flute__0B91BA14" Association="CartonMohamad_PriceModel.FK__PaperComb__flute__0B91BA14">
+            <End Role="Tb_Paper" EntitySet="Tb_Paper" />
+            <End Role="PaperCombo" EntitySet="PaperCombos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PaperComb__flute__0D7A0286" Association="CartonMohamad_PriceModel.FK__PaperComb__flute__0D7A0286">
+            <End Role="Tb_Paper" EntitySet="Tb_Paper" />
+            <End Role="PaperCombo" EntitySet="PaperCombos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PaperComb__middl__0C85DE4D" Association="CartonMohamad_PriceModel.FK__PaperComb__middl__0C85DE4D">
+            <End Role="Tb_Paper" EntitySet="Tb_Paper" />
+            <End Role="PaperCombo" EntitySet="PaperCombos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PaperComb__produ__08B54D69" Association="CartonMohamad_PriceModel.FK__PaperComb__produ__08B54D69">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="PaperCombo" EntitySet="PaperCombos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PaperComb__top_l__0A9D95DB" Association="CartonMohamad_PriceModel.FK__PaperComb__top_l__0A9D95DB">
+            <End Role="Tb_Paper" EntitySet="Tb_Paper" />
+            <End Role="PaperCombo" EntitySet="PaperCombos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProductIm__produ__7A672E12" Association="CartonMohamad_PriceModel.FK__ProductIm__produ__7A672E12">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="ProductImage" EntitySet="ProductImages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tb_Body_Order_Products" Association="CartonMohamad_PriceModel.FK_Tb_Body_Order_Products">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="Tb_Body_Order" EntitySet="Tb_Body_Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tb_Body_Order_Tb_Order" Association="CartonMohamad_PriceModel.FK_Tb_Body_Order_Tb_Order">
+            <End Role="Tb_Order" EntitySet="Tb_Order" />
+            <End Role="Tb_Body_Order" EntitySet="Tb_Body_Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tb_join_Categori_Paper_Tb_Catgori" Association="CartonMohamad_PriceModel.FK_Tb_join_Categori_Paper_Tb_Catgori">
+            <End Role="Tb_Catgori" EntitySet="Tb_Catgori" />
+            <End Role="Tb_join_Categori_Paper" EntitySet="Tb_join_Categori_Paper" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tb_join_Categori_Paper_Tb_Paper" Association="CartonMohamad_PriceModel.FK_Tb_join_Categori_Paper_Tb_Paper">
+            <End Role="Tb_Paper" EntitySet="Tb_Paper" />
+            <End Role="Tb_join_Categori_Paper" EntitySet="Tb_join_Categori_Paper" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="crm_CustomerMarketingActivities">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="J_ID_Customer" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="expert_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="next_contact_at" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="customer_grade" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="Descript" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="meeting_outcome" Type="Boolean" Nullable="false" />
+          <Property Name="activity_type" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Customer" Relationship="CartonMohamad_PriceModel.FK_crm_CustomerMarketingActivities_Customer" FromRole="crm_CustomerMarketingActivities" ToRole="Customer" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Customer1" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="company_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="payment_behavior" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="crm_CustomerMarketingActivities" Relationship="CartonMohamad_PriceModel.FK_crm_CustomerMarketingActivities_Customer" FromRole="Customer" ToRole="crm_CustomerMarketingActivities" />
+          <NavigationProperty Name="Info_Compuni" Relationship="CartonMohamad_PriceModel.FK_Info_Compuni_Customer" FromRole="Customer" ToRole="Info_Compuni" />
+          <NavigationProperty Name="Tb_Order" Relationship="CartonMohamad_PriceModel.FK_Tb_Order_Customer" FromRole="Customer" ToRole="Tb_Order" />
+        </EntityType>
+        <EntityType Name="FinalCharge">
+          <Key>
+            <PropertyRef Name="final_charge_id" />
+          </Key>
+          <Property Name="final_charge_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="is_active" Type="Boolean" Nullable="false" />
+          <Property Name="is_required" Type="Boolean" Nullable="false" />
+          <Property Name="calc_type" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="priority" Type="Int16" Nullable="false" />
+          <Property Name="apply_on" Type="String" Nullable="false" MaxLength="24" FixedLength="false" Unicode="true" />
+          <Property Name="percent_rate" Type="Decimal" Precision="7" Scale="4" />
+          <Property Name="fixed_amount_irr" Type="Int64" />
+          <NavigationProperty Name="Tb_Body_Order" Relationship="CartonMohamad_PriceModel.FK_Tb_Body_Order_FinalCharges" FromRole="FinalCharge" ToRole="Tb_Body_Order" />
+        </EntityType>
+        <EntityType Name="Info_Compuni">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="J_ID_Customer" Type="Int32" Nullable="false" />
+          <Property Name="address_factory" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="address_sales_office" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="address_warehouse" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="address_dispatch" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="phone_factory" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="phone_sales_office" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="phone_procurement_manager" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Customer" Relationship="CartonMohamad_PriceModel.FK_Info_Compuni_Customer" FromRole="Info_Compuni" ToRole="Customer" />
+        </EntityType>
+        <EntityType Name="OverheadCost">
+          <Key>
+            <PropertyRef Name="overhead_id" />
+          </Key>
+          <Property Name="overhead_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="is_required" Type="Boolean" Nullable="false" />
+          <Property Name="calc_method" Type="String" Nullable="false" MaxLength="24" FixedLength="false" Unicode="true" />
+          <Property Name="quantity" Type="Decimal" Precision="12" Scale="3" />
+          <Property Name="qty_per_meter" Type="Decimal" Precision="12" Scale="4" />
+          <Property Name="unit_price_irr" Type="Int64" Nullable="false" />
+          <Property Name="show_on_invoice" Type="Boolean" Nullable="false" />
+          <Property Name="price" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Tb_Body_Order" Relationship="CartonMohamad_PriceModel.FK_Tb_Body_Order_OverheadCosts" FromRole="OverheadCost" ToRole="Tb_Body_Order" />
+        </EntityType>
+        <EntityType Name="PaperCombo">
+          <Key>
+            <PropertyRef Name="combo_id" />
+          </Key>
+          <Property Name="combo_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="product_id" Type="Int32" Nullable="false" />
+          <Property Name="combo_name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="combo_kind" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="top_liner_paper_id" Type="Int32" />
+          <Property Name="flute_be_paper_id" Type="Int32" />
+          <Property Name="middle_paper_id" Type="Int32" />
+          <Property Name="flute_c_paper_id" Type="Int32" />
+          <Property Name="bottom_liner_paper_id" Type="Int32" />
+          <Property Name="is_active" Type="Boolean" Nullable="false" />
+          <Property Name="notes" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="Tb_Paper" Relationship="CartonMohamad_PriceModel.FK__PaperComb__botto__0E6E26BF" FromRole="PaperCombo" ToRole="Tb_Paper" />
+          <NavigationProperty Name="Tb_Paper1" Relationship="CartonMohamad_PriceModel.FK__PaperComb__flute__0B91BA14" FromRole="PaperCombo" ToRole="Tb_Paper" />
+          <NavigationProperty Name="Tb_Paper2" Relationship="CartonMohamad_PriceModel.FK__PaperComb__flute__0D7A0286" FromRole="PaperCombo" ToRole="Tb_Paper" />
+          <NavigationProperty Name="Tb_Paper3" Relationship="CartonMohamad_PriceModel.FK__PaperComb__middl__0C85DE4D" FromRole="PaperCombo" ToRole="Tb_Paper" />
+          <NavigationProperty Name="Product" Relationship="CartonMohamad_PriceModel.FK__PaperComb__produ__08B54D69" FromRole="PaperCombo" ToRole="Product" />
+          <NavigationProperty Name="Tb_Paper4" Relationship="CartonMohamad_PriceModel.FK__PaperComb__top_l__0A9D95DB" FromRole="PaperCombo" ToRole="Tb_Paper" />
+        </EntityType>
+        <EntityType Name="ProductImage">
+          <Key>
+            <PropertyRef Name="image_id" />
+          </Key>
+          <Property Name="image_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="product_id" Type="Int32" Nullable="false" />
+          <Property Name="file_url" Type="String" Nullable="false" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="storage_provider" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="alt_text" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="caption" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="is_primary" Type="Boolean" Nullable="false" />
+          <Property Name="sort_order" Type="Int32" Nullable="false" />
+          <Property Name="mime_type" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="width_px" Type="Int32" />
+          <Property Name="height_px" Type="Int32" />
+          <Property Name="size_bytes" Type="Int64" />
+          <Property Name="checksum_sha1" Type="String" MaxLength="40" FixedLength="true" Unicode="false" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="Product" Relationship="CartonMohamad_PriceModel.FK__ProductIm__produ__7A672E12" FromRole="ProductImage" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="product_id" />
+          </Key>
+          <Property Name="product_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="product_code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="product_name" Type="String" Nullable="false" MaxLength="120" FixedLength="false" Unicode="true" />
+          <Property Name="product_type" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="tirage" Type="Int32" Nullable="false" />
+          <Property Name="layers_count" Type="Byte" />
+          <Property Name="pieces_count" Type="Byte" />
+          <Property Name="door_type" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="doors_count" Type="Byte" />
+          <Property Name="length_cm" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="width_cm" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="height_cm" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="sheets_per_order" Type="Int32" />
+          <Property Name="units_per_sheet" Type="Int32" />
+          <Property Name="bottoms_per_sheet" Type="Int32" />
+          <Property Name="flap_total_cm" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="flap_top_cm" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="flap_bottom_cm" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="die_to_die_length_cm" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="mold_width_cm" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="bottoms_per_mold" Type="Int16" />
+          <Property Name="industrial_length_cm" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="industrial_width_cm" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="carton_consumption_m2" Type="Decimal" Precision="12" Scale="4" />
+          <Property Name="grammage_gsm" Type="Int16" />
+          <Property Name="industrial_area_m2" Type="Decimal" Precision="29" Scale="11" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="flute_type" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PaperCombos" Relationship="CartonMohamad_PriceModel.FK__PaperComb__produ__08B54D69" FromRole="Product" ToRole="PaperCombo" />
+          <NavigationProperty Name="ProductImages" Relationship="CartonMohamad_PriceModel.FK__ProductIm__produ__7A672E12" FromRole="Product" ToRole="ProductImage" />
+          <NavigationProperty Name="Tb_Body_Order" Relationship="CartonMohamad_PriceModel.FK_Tb_Body_Order_Products" FromRole="Product" ToRole="Tb_Body_Order" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Tb_Body_Order">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="J_ID_order" Type="Int64" Nullable="false" />
+          <Property Name="J_ID_Production" Type="Int32" Nullable="false" />
+          <Property Name="final_charge_id" Type="Int32" />
+          <Property Name="J_id_OverheadCosts" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="FinalCharge" Relationship="CartonMohamad_PriceModel.FK_Tb_Body_Order_FinalCharges" FromRole="Tb_Body_Order" ToRole="FinalCharge" />
+          <NavigationProperty Name="OverheadCost" Relationship="CartonMohamad_PriceModel.FK_Tb_Body_Order_OverheadCosts" FromRole="Tb_Body_Order" ToRole="OverheadCost" />
+          <NavigationProperty Name="Product" Relationship="CartonMohamad_PriceModel.FK_Tb_Body_Order_Products" FromRole="Tb_Body_Order" ToRole="Product" />
+          <NavigationProperty Name="Tb_Order" Relationship="CartonMohamad_PriceModel.FK_Tb_Body_Order_Tb_Order" FromRole="Tb_Body_Order" ToRole="Tb_Order" />
+        </EntityType>
+        <EntityType Name="Tb_Catgori">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Categori" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Tb_join_Categori_Paper" Relationship="CartonMohamad_PriceModel.FK_Tb_join_Categori_Paper_Tb_Catgori" FromRole="Tb_Catgori" ToRole="Tb_join_Categori_Paper" />
+        </EntityType>
+        <EntityType Name="Tb_join_Categori_Paper">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="J_ID_Catgori" Type="Int32" Nullable="false" />
+          <Property Name="J_ID_PAper" Type="Int32" Nullable="false" />
+          <Property Name="Value" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="type" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Tb_Catgori" Relationship="CartonMohamad_PriceModel.FK_Tb_join_Categori_Paper_Tb_Catgori" FromRole="Tb_join_Categori_Paper" ToRole="Tb_Catgori" />
+          <NavigationProperty Name="Tb_Paper" Relationship="CartonMohamad_PriceModel.FK_Tb_join_Categori_Paper_Tb_Paper" FromRole="Tb_join_Categori_Paper" ToRole="Tb_Paper" />
+        </EntityType>
+        <EntityType Name="Tb_Order">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="J_ID_Customer" Type="Int32" Nullable="false" />
+          <Property Name="Number_order" Type="Int32" Nullable="false" />
+          <Property Name="J_ID_Facktor" Type="Int64" Nullable="false" />
+          <Property Name="Number_ORder_rahkaran" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Customer" Relationship="CartonMohamad_PriceModel.FK_Tb_Order_Customer" FromRole="Tb_Order" ToRole="Customer" />
+          <NavigationProperty Name="Tb_Body_Order" Relationship="CartonMohamad_PriceModel.FK_Tb_Body_Order_Tb_Order" FromRole="Tb_Order" ToRole="Tb_Body_Order" />
+        </EntityType>
+        <EntityType Name="Tb_Paper">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Paper_Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="price_per_sheet" Type="Int32" />
+          <Property Name="shipping_cost" Type="Int32" />
+          <NavigationProperty Name="PaperCombos" Relationship="CartonMohamad_PriceModel.FK__PaperComb__botto__0E6E26BF" FromRole="Tb_Paper" ToRole="PaperCombo" />
+          <NavigationProperty Name="PaperCombos1" Relationship="CartonMohamad_PriceModel.FK__PaperComb__flute__0B91BA14" FromRole="Tb_Paper" ToRole="PaperCombo" />
+          <NavigationProperty Name="PaperCombos2" Relationship="CartonMohamad_PriceModel.FK__PaperComb__flute__0D7A0286" FromRole="Tb_Paper" ToRole="PaperCombo" />
+          <NavigationProperty Name="PaperCombos3" Relationship="CartonMohamad_PriceModel.FK__PaperComb__middl__0C85DE4D" FromRole="Tb_Paper" ToRole="PaperCombo" />
+          <NavigationProperty Name="PaperCombos4" Relationship="CartonMohamad_PriceModel.FK__PaperComb__top_l__0A9D95DB" FromRole="Tb_Paper" ToRole="PaperCombo" />
+          <NavigationProperty Name="Tb_join_Categori_Paper" Relationship="CartonMohamad_PriceModel.FK_Tb_join_Categori_Paper_Tb_Paper" FromRole="Tb_Paper" ToRole="Tb_join_Categori_Paper" />
+        </EntityType>
+        <Association Name="FK_crm_CustomerMarketingActivities_Customer">
+          <End Type="CartonMohamad_PriceModel.Customer" Role="Customer" Multiplicity="1" />
+          <End Type="CartonMohamad_PriceModel.crm_CustomerMarketingActivities" Role="crm_CustomerMarketingActivities" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="crm_CustomerMarketingActivities">
+              <PropertyRef Name="J_ID_Customer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Info_Compuni_Customer">
+          <End Type="CartonMohamad_PriceModel.Customer" Role="Customer" Multiplicity="1" />
+          <End Type="CartonMohamad_PriceModel.Info_Compuni" Role="Info_Compuni" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Info_Compuni">
+              <PropertyRef Name="J_ID_Customer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tb_Order_Customer">
+          <End Type="CartonMohamad_PriceModel.Customer" Role="Customer" Multiplicity="1" />
+          <End Type="CartonMohamad_PriceModel.Tb_Order" Role="Tb_Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Tb_Order">
+              <PropertyRef Name="J_ID_Customer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tb_Body_Order_FinalCharges">
+          <End Type="CartonMohamad_PriceModel.FinalCharge" Role="FinalCharge" Multiplicity="0..1" />
+          <End Type="CartonMohamad_PriceModel.Tb_Body_Order" Role="Tb_Body_Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FinalCharge">
+              <PropertyRef Name="final_charge_id" />
+            </Principal>
+            <Dependent Role="Tb_Body_Order">
+              <PropertyRef Name="final_charge_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tb_Body_Order_OverheadCosts">
+          <End Type="CartonMohamad_PriceModel.OverheadCost" Role="OverheadCost" Multiplicity="1" />
+          <End Type="CartonMohamad_PriceModel.Tb_Body_Order" Role="Tb_Body_Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OverheadCost">
+              <PropertyRef Name="overhead_id" />
+            </Principal>
+            <Dependent Role="Tb_Body_Order">
+              <PropertyRef Name="J_id_OverheadCosts" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PaperComb__botto__0E6E26BF">
+          <End Type="CartonMohamad_PriceModel.Tb_Paper" Role="Tb_Paper" Multiplicity="0..1" />
+          <End Type="CartonMohamad_PriceModel.PaperCombo" Role="PaperCombo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tb_Paper">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PaperCombo">
+              <PropertyRef Name="bottom_liner_paper_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PaperComb__flute__0B91BA14">
+          <End Type="CartonMohamad_PriceModel.Tb_Paper" Role="Tb_Paper" Multiplicity="0..1" />
+          <End Type="CartonMohamad_PriceModel.PaperCombo" Role="PaperCombo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tb_Paper">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PaperCombo">
+              <PropertyRef Name="flute_be_paper_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PaperComb__flute__0D7A0286">
+          <End Type="CartonMohamad_PriceModel.Tb_Paper" Role="Tb_Paper" Multiplicity="0..1" />
+          <End Type="CartonMohamad_PriceModel.PaperCombo" Role="PaperCombo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tb_Paper">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PaperCombo">
+              <PropertyRef Name="flute_c_paper_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PaperComb__middl__0C85DE4D">
+          <End Type="CartonMohamad_PriceModel.Tb_Paper" Role="Tb_Paper" Multiplicity="0..1" />
+          <End Type="CartonMohamad_PriceModel.PaperCombo" Role="PaperCombo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tb_Paper">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PaperCombo">
+              <PropertyRef Name="middle_paper_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PaperComb__produ__08B54D69">
+          <End Type="CartonMohamad_PriceModel.Product" Role="Product" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="CartonMohamad_PriceModel.PaperCombo" Role="PaperCombo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="product_id" />
+            </Principal>
+            <Dependent Role="PaperCombo">
+              <PropertyRef Name="product_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PaperComb__top_l__0A9D95DB">
+          <End Type="CartonMohamad_PriceModel.Tb_Paper" Role="Tb_Paper" Multiplicity="0..1" />
+          <End Type="CartonMohamad_PriceModel.PaperCombo" Role="PaperCombo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tb_Paper">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PaperCombo">
+              <PropertyRef Name="top_liner_paper_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProductIm__produ__7A672E12">
+          <End Type="CartonMohamad_PriceModel.Product" Role="Product" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="CartonMohamad_PriceModel.ProductImage" Role="ProductImage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="product_id" />
+            </Principal>
+            <Dependent Role="ProductImage">
+              <PropertyRef Name="product_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tb_Body_Order_Products">
+          <End Type="CartonMohamad_PriceModel.Product" Role="Product" Multiplicity="1" />
+          <End Type="CartonMohamad_PriceModel.Tb_Body_Order" Role="Tb_Body_Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="product_id" />
+            </Principal>
+            <Dependent Role="Tb_Body_Order">
+              <PropertyRef Name="J_ID_Production" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tb_Body_Order_Tb_Order">
+          <End Type="CartonMohamad_PriceModel.Tb_Order" Role="Tb_Order" Multiplicity="1" />
+          <End Type="CartonMohamad_PriceModel.Tb_Body_Order" Role="Tb_Body_Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tb_Order">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Tb_Body_Order">
+              <PropertyRef Name="J_ID_order" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tb_join_Categori_Paper_Tb_Catgori">
+          <End Type="CartonMohamad_PriceModel.Tb_Catgori" Role="Tb_Catgori" Multiplicity="1" />
+          <End Type="CartonMohamad_PriceModel.Tb_join_Categori_Paper" Role="Tb_join_Categori_Paper" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tb_Catgori">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Tb_join_Categori_Paper">
+              <PropertyRef Name="J_ID_Catgori" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tb_join_Categori_Paper_Tb_Paper">
+          <End Type="CartonMohamad_PriceModel.Tb_Paper" Role="Tb_Paper" Multiplicity="1" />
+          <End Type="CartonMohamad_PriceModel.Tb_join_Categori_Paper" Role="Tb_join_Categori_Paper" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tb_Paper">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Tb_join_Categori_Paper">
+              <PropertyRef Name="J_ID_PAper" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CartonMohamad_PriceModelStoreContainer" CdmEntityContainer="CartonMohamad_PriceEntities">
+          <EntitySetMapping Name="crm_CustomerMarketingActivities">
+            <EntityTypeMapping TypeName="CartonMohamad_PriceModel.crm_CustomerMarketingActivities">
+              <MappingFragment StoreEntitySet="crm_CustomerMarketingActivities">
+                <ScalarProperty Name="activity_type" ColumnName="activity_type" />
+                <ScalarProperty Name="meeting_outcome" ColumnName="meeting_outcome" />
+                <ScalarProperty Name="Descript" ColumnName="Descript" />
+                <ScalarProperty Name="customer_grade" ColumnName="customer_grade" />
+                <ScalarProperty Name="next_contact_at" ColumnName="next_contact_at" />
+                <ScalarProperty Name="expert_name" ColumnName="expert_name" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="J_ID_Customer" ColumnName="J_ID_Customer" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="CartonMohamad_PriceModel.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="payment_behavior" ColumnName="payment_behavior" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="company_name" ColumnName="company_name" />
+                <ScalarProperty Name="Customer1" ColumnName="Customer" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FinalCharges">
+            <EntityTypeMapping TypeName="CartonMohamad_PriceModel.FinalCharge">
+              <MappingFragment StoreEntitySet="FinalCharges">
+                <ScalarProperty Name="fixed_amount_irr" ColumnName="fixed_amount_irr" />
+                <ScalarProperty Name="percent_rate" ColumnName="percent_rate" />
+                <ScalarProperty Name="apply_on" ColumnName="apply_on" />
+                <ScalarProperty Name="priority" ColumnName="priority" />
+                <ScalarProperty Name="calc_type" ColumnName="calc_type" />
+                <ScalarProperty Name="is_required" ColumnName="is_required" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="final_charge_id" ColumnName="final_charge_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Info_Compuni">
+            <EntityTypeMapping TypeName="CartonMohamad_PriceModel.Info_Compuni">
+              <MappingFragment StoreEntitySet="Info_Compuni">
+                <ScalarProperty Name="phone_procurement_manager" ColumnName="phone_procurement_manager" />
+                <ScalarProperty Name="phone_sales_office" ColumnName="phone_sales_office" />
+                <ScalarProperty Name="phone_factory" ColumnName="phone_factory" />
+                <ScalarProperty Name="address_dispatch" ColumnName="address_dispatch" />
+                <ScalarProperty Name="address_warehouse" ColumnName="address_warehouse" />
+                <ScalarProperty Name="address_sales_office" ColumnName="address_sales_office" />
+                <ScalarProperty Name="address_factory" ColumnName="address_factory" />
+                <ScalarProperty Name="J_ID_Customer" ColumnName="J_ID_Customer" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OverheadCosts">
+            <EntityTypeMapping TypeName="CartonMohamad_PriceModel.OverheadCost">
+              <MappingFragment StoreEntitySet="OverheadCosts">
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="show_on_invoice" ColumnName="show_on_invoice" />
+                <ScalarProperty Name="unit_price_irr" ColumnName="unit_price_irr" />
+                <ScalarProperty Name="qty_per_meter" ColumnName="qty_per_meter" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="calc_method" ColumnName="calc_method" />
+                <ScalarProperty Name="is_required" ColumnName="is_required" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="overhead_id" ColumnName="overhead_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PaperCombos">
+            <EntityTypeMapping TypeName="CartonMohamad_PriceModel.PaperCombo">
+              <MappingFragment StoreEntitySet="PaperCombos">
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="notes" ColumnName="notes" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
+                <ScalarProperty Name="bottom_liner_paper_id" ColumnName="bottom_liner_paper_id" />
+                <ScalarProperty Name="flute_c_paper_id" ColumnName="flute_c_paper_id" />
+                <ScalarProperty Name="middle_paper_id" ColumnName="middle_paper_id" />
+                <ScalarProperty Name="flute_be_paper_id" ColumnName="flute_be_paper_id" />
+                <ScalarProperty Name="top_liner_paper_id" ColumnName="top_liner_paper_id" />
+                <ScalarProperty Name="combo_kind" ColumnName="combo_kind" />
+                <ScalarProperty Name="combo_name" ColumnName="combo_name" />
+                <ScalarProperty Name="product_id" ColumnName="product_id" />
+                <ScalarProperty Name="combo_id" ColumnName="combo_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductImages">
+            <EntityTypeMapping TypeName="CartonMohamad_PriceModel.ProductImage">
+              <MappingFragment StoreEntitySet="ProductImages">
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="checksum_sha1" ColumnName="checksum_sha1" />
+                <ScalarProperty Name="size_bytes" ColumnName="size_bytes" />
+                <ScalarProperty Name="height_px" ColumnName="height_px" />
+                <ScalarProperty Name="width_px" ColumnName="width_px" />
+                <ScalarProperty Name="mime_type" ColumnName="mime_type" />
+                <ScalarProperty Name="sort_order" ColumnName="sort_order" />
+                <ScalarProperty Name="is_primary" ColumnName="is_primary" />
+                <ScalarProperty Name="caption" ColumnName="caption" />
+                <ScalarProperty Name="alt_text" ColumnName="alt_text" />
+                <ScalarProperty Name="storage_provider" ColumnName="storage_provider" />
+                <ScalarProperty Name="file_url" ColumnName="file_url" />
+                <ScalarProperty Name="product_id" ColumnName="product_id" />
+                <ScalarProperty Name="image_id" ColumnName="image_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="CartonMohamad_PriceModel.Product">
+              <MappingFragment StoreEntitySet="Products">
+                <ScalarProperty Name="flute_type" ColumnName="flute_type" />
+                <ScalarProperty Name="industrial_area_m2" ColumnName="industrial_area_m2" />
+                <ScalarProperty Name="grammage_gsm" ColumnName="grammage_gsm" />
+                <ScalarProperty Name="carton_consumption_m2" ColumnName="carton_consumption_m2" />
+                <ScalarProperty Name="industrial_width_cm" ColumnName="industrial_width_cm" />
+                <ScalarProperty Name="industrial_length_cm" ColumnName="industrial_length_cm" />
+                <ScalarProperty Name="bottoms_per_mold" ColumnName="bottoms_per_mold" />
+                <ScalarProperty Name="mold_width_cm" ColumnName="mold_width_cm" />
+                <ScalarProperty Name="die_to_die_length_cm" ColumnName="die_to_die_length_cm" />
+                <ScalarProperty Name="flap_bottom_cm" ColumnName="flap_bottom_cm" />
+                <ScalarProperty Name="flap_top_cm" ColumnName="flap_top_cm" />
+                <ScalarProperty Name="flap_total_cm" ColumnName="flap_total_cm" />
+                <ScalarProperty Name="bottoms_per_sheet" ColumnName="bottoms_per_sheet" />
+                <ScalarProperty Name="units_per_sheet" ColumnName="units_per_sheet" />
+                <ScalarProperty Name="sheets_per_order" ColumnName="sheets_per_order" />
+                <ScalarProperty Name="height_cm" ColumnName="height_cm" />
+                <ScalarProperty Name="width_cm" ColumnName="width_cm" />
+                <ScalarProperty Name="length_cm" ColumnName="length_cm" />
+                <ScalarProperty Name="doors_count" ColumnName="doors_count" />
+                <ScalarProperty Name="door_type" ColumnName="door_type" />
+                <ScalarProperty Name="pieces_count" ColumnName="pieces_count" />
+                <ScalarProperty Name="layers_count" ColumnName="layers_count" />
+                <ScalarProperty Name="tirage" ColumnName="tirage" />
+                <ScalarProperty Name="product_type" ColumnName="product_type" />
+                <ScalarProperty Name="product_name" ColumnName="product_name" />
+                <ScalarProperty Name="product_code" ColumnName="product_code" />
+                <ScalarProperty Name="product_id" ColumnName="product_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="CartonMohamad_PriceModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tb_Body_Order">
+            <EntityTypeMapping TypeName="CartonMohamad_PriceModel.Tb_Body_Order">
+              <MappingFragment StoreEntitySet="Tb_Body_Order">
+                <ScalarProperty Name="J_id_OverheadCosts" ColumnName="J_id_OverheadCosts" />
+                <ScalarProperty Name="final_charge_id" ColumnName="final_charge_id" />
+                <ScalarProperty Name="J_ID_Production" ColumnName="J_ID_Production" />
+                <ScalarProperty Name="J_ID_order" ColumnName="J_ID_order" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tb_Catgori">
+            <EntityTypeMapping TypeName="CartonMohamad_PriceModel.Tb_Catgori">
+              <MappingFragment StoreEntitySet="Tb_Catgori">
+                <ScalarProperty Name="Categori" ColumnName="Categori" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tb_join_Categori_Paper">
+            <EntityTypeMapping TypeName="CartonMohamad_PriceModel.Tb_join_Categori_Paper">
+              <MappingFragment StoreEntitySet="Tb_join_Categori_Paper">
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="J_ID_PAper" ColumnName="J_ID_PAper" />
+                <ScalarProperty Name="J_ID_Catgori" ColumnName="J_ID_Catgori" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tb_Order">
+            <EntityTypeMapping TypeName="CartonMohamad_PriceModel.Tb_Order">
+              <MappingFragment StoreEntitySet="Tb_Order">
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Number_ORder_rahkaran" ColumnName="Number_ORder_rahkaran" />
+                <ScalarProperty Name="J_ID_Facktor" ColumnName="J_ID_Facktor" />
+                <ScalarProperty Name="Number_order" ColumnName="Number_order" />
+                <ScalarProperty Name="J_ID_Customer" ColumnName="J_ID_Customer" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tb_Paper">
+            <EntityTypeMapping TypeName="CartonMohamad_PriceModel.Tb_Paper">
+              <MappingFragment StoreEntitySet="Tb_Paper">
+                <ScalarProperty Name="shipping_cost" ColumnName="shipping_cost" />
+                <ScalarProperty Name="price_per_sheet" ColumnName="price_per_sheet" />
+                <ScalarProperty Name="Paper_Name" ColumnName="Paper_Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

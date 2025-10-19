@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="01c532edd303434fa2398c1f1e3f53d4" Name="Diagram1" ZoomLevel="86">
+        <EntityTypeShape EntityType="CartonMohamad_PriceModel.crm_CustomerMarketingActivities" Width="1.5" PointX="8" PointY="8.875" />
+        <EntityTypeShape EntityType="CartonMohamad_PriceModel.Customer" Width="1.5" PointX="5.75" PointY="12.625" />
+        <EntityTypeShape EntityType="CartonMohamad_PriceModel.FinalCharge" Width="1.5" PointX="8" PointY="19.75" />
+        <EntityTypeShape EntityType="CartonMohamad_PriceModel.Info_Compuni" Width="1.5" PointX="8" PointY="12.625" />
+        <EntityTypeShape EntityType="CartonMohamad_PriceModel.OverheadCost" Width="1.5" PointX="8" PointY="23.5" />
+        <EntityTypeShape EntityType="CartonMohamad_PriceModel.PaperCombo" Width="1.5" PointX="3" PointY="3.25" />
+        <EntityTypeShape EntityType="CartonMohamad_PriceModel.ProductImage" Width="1.5" PointX="3" PointY="10.625" />
+        <EntityTypeShape EntityType="CartonMohamad_PriceModel.Product" Width="1.5" PointX="0.75" PointY="9.125" />
+        <EntityTypeShape EntityType="CartonMohamad_PriceModel.sysdiagram" Width="1.5" PointX="5.75" PointY="1.25" />
+        <EntityTypeShape EntityType="CartonMohamad_PriceModel.Tb_Body_Order" Width="1.5" PointX="10.25" PointY="12.75" />
+        <EntityTypeShape EntityType="CartonMohamad_PriceModel.Tb_Catgori" Width="1.5" PointX="3.75" PointY="0.75" />
+        <EntityTypeShape EntityType="CartonMohamad_PriceModel.Tb_join_Categori_Paper" Width="1.5" PointX="6" PointY="4.375" />
+        <EntityTypeShape EntityType="CartonMohamad_PriceModel.Tb_Order" Width="1.5" PointX="8" PointY="16.25" />
+        <EntityTypeShape EntityType="CartonMohamad_PriceModel.Tb_Paper" Width="1.5" PointX="0.75" PointY="4.125" />
+        <AssociationConnector Association="CartonMohamad_PriceModel.FK_crm_CustomerMarketingActivities_Customer" />
+        <AssociationConnector Association="CartonMohamad_PriceModel.FK_Info_Compuni_Customer" />
+        <AssociationConnector Association="CartonMohamad_PriceModel.FK_Tb_Order_Customer" />
+        <AssociationConnector Association="CartonMohamad_PriceModel.FK_Tb_Body_Order_FinalCharges" />
+        <AssociationConnector Association="CartonMohamad_PriceModel.FK_Tb_Body_Order_OverheadCosts" />
+        <AssociationConnector Association="CartonMohamad_PriceModel.FK__PaperComb__botto__0E6E26BF" />
+        <AssociationConnector Association="CartonMohamad_PriceModel.FK__PaperComb__flute__0B91BA14" />
+        <AssociationConnector Association="CartonMohamad_PriceModel.FK__PaperComb__flute__0D7A0286" />
+        <AssociationConnector Association="CartonMohamad_PriceModel.FK__PaperComb__middl__0C85DE4D" />
+        <AssociationConnector Association="CartonMohamad_PriceModel.FK__PaperComb__produ__08B54D69" />
+        <AssociationConnector Association="CartonMohamad_PriceModel.FK__PaperComb__top_l__0A9D95DB" />
+        <AssociationConnector Association="CartonMohamad_PriceModel.FK__ProductIm__produ__7A672E12" />
+        <AssociationConnector Association="CartonMohamad_PriceModel.FK_Tb_Body_Order_Products" />
+        <AssociationConnector Association="CartonMohamad_PriceModel.FK_Tb_Body_Order_Tb_Order" />
+        <AssociationConnector Association="CartonMohamad_PriceModel.FK_Tb_join_Categori_Paper_Tb_Catgori" />
+        <AssociationConnector Association="CartonMohamad_PriceModel.FK_Tb_join_Categori_Paper_Tb_Paper" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
