@@ -7,24 +7,23 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+// CartonMohamad_PriceEntities.cs
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+
 namespace cartonmohamad_sales.Models
 {
-    using System;
-    using System.Data.Entity;
-    using System.Data.Entity.Infrastructure;
-    
     public partial class CartonMohamad_PriceEntities : DbContext
     {
         public CartonMohamad_PriceEntities()
             : base("name=CartonMohamad_PriceEntities")
         {
+            // تنظیمات متداول EF6
+            this.Configuration.LazyLoadingEnabled = true;
+            this.Configuration.ProxyCreationEnabled = true;
         }
-    
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            throw new UnintentionalCodeFirstException();
-        }
-    
+
+        // DbSets
         public virtual DbSet<crm_CustomerMarketingActivities> crm_CustomerMarketingActivities { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<FinalCharge> FinalCharges { get; set; }
@@ -39,5 +38,38 @@ namespace cartonmohamad_sales.Models
         public virtual DbSet<Tb_join_Categori_Paper> Tb_join_Categori_Paper { get; set; }
         public virtual DbSet<Tb_Order> Tb_Order { get; set; }
         public virtual DbSet<Tb_Paper> Tb_Paper { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            // دیگر استثنا نده
+            // throw new UnintentionalCodeFirstException();
+
+            // --- رابطه‌ی crm_CustomerMarketingActivities ↔ Customer ---
+            // FK واقعی در دیتابیس: J_ID_Customer  →  Customer(ID)
+            // از MapKey استفاده می‌کنیم تا به پراپرتی J_ID_Customer در کلاس نیاز نباشد.
+            modelBuilder.Entity<crm_CustomerMarketingActivities>()
+                .HasRequired(a => a.Customer)                              // ناوبری باید وجود داشته باشد (partial ما دارد)
+                .WithMany(c => c.crm_CustomerMarketingActivities)
+                .Map(m => m.MapKey("J_ID_Customer"))                       // نام دقیق ستون FK در DB
+                .WillCascadeOnDelete(false);                               // طبق نیازت
+
+            // --- Precision/Scale برای Decimal های حساس ---
+            modelBuilder.Entity<FinalCharge>()
+                .Property(f => f.percent_rate)
+                .HasPrecision(7, 4);
+
+            // اگر برای سایر Decimalها هم Precision می‌خواهی، این‌ها را باز کن و مطابق نام‌های مدل خودت تنظیم کن:
+            
+            modelBuilder.Entity<Product>().Property(p => p.length_cm).HasPrecision(10, 2);
+            modelBuilder.Entity<Product>().Property(p => p.width_cm).HasPrecision(10, 2);
+            modelBuilder.Entity<Product>().Property(p => p.height_cm).HasPrecision(10, 2);
+            modelBuilder.Entity<Product>().Property(p => p.die_to_die_length_cm).HasPrecision(10, 2);
+            modelBuilder.Entity<Product>().Property(p => p.mold_width_cm).HasPrecision(10, 2);
+            modelBuilder.Entity<Product>().Property(p => p.industrial_length_cm).HasPrecision(10, 2);
+            modelBuilder.Entity<Product>().Property(p => p.industrial_width_cm).HasPrecision(10, 2);
+            modelBuilder.Entity<Product>().Property(p => p.carton_consumption_m2).HasPrecision(12, 4);
+           
+        }
+
     }
 }
