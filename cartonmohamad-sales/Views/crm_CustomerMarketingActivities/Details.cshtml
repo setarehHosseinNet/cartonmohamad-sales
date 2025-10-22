@@ -1,0 +1,83 @@
+﻿@model cartonmohamad_sales.Models.crm_CustomerMarketingActivities
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>crm_CustomerMarketingActivities</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.expert_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.expert_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.next_contact_at)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.next_contact_at)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.customer_grade)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.customer_grade)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descript)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descript)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.meeting_outcome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.meeting_outcome)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.activity_type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.activity_type)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Customer.Customer1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Customer.Customer1)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

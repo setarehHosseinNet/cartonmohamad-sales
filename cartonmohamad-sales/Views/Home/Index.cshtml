@@ -1,33 +1,230 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "کارتن محمد | صفحه اصلی";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<main>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">ASP.NET</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-        <p><a href="https://asp.net" class="btn btn-primary btn-md">Learn more &raquo;</a></p>
+<style>
+    /* --- RTL & Typography --- */
+    body { direction: rtl; }
+    .rtl { direction: rtl; text-align: right; }
+    .ltr { direction: ltr; }
+    .fw-800 { font-weight: 800; }
+    .text-brand { color: #0ea5e9; }
+    .bg-brand { background: #0ea5e9; }
+    .btn-brand { background:#0ea5e9; border-color:#0ea5e9; color:#fff; }
+    .btn-brand:hover { background:#0284c7; border-color:#0284c7; color:#fff; }
+
+    /* --- Hero --- */
+    .hero {
+        position: relative;
+        overflow: hidden;
+        border-radius: 18px;
+        padding: 48px 28px;
+        margin-bottom: 28px;
+        background:
+            radial-gradient(1200px 600px at 110% -10%, rgba(14,165,233,.25), transparent 60%),
+            radial-gradient(900px 400px at -10% 110%, rgba(34,197,94,.25), transparent 55%),
+            linear-gradient(135deg, #0f172a 0%, #0b1220 60%, #0b1220 100%);
+        color: #eef6ff;
+        box-shadow: 0 10px 30px rgba(2,8,23,.35);
+    }
+    .hero h1 { font-size: clamp(28px, 5vw, 44px); }
+    .hero p { color:#cfe8ff; font-size: 16px; }
+    .hero-ill {
+        max-width: 560px;
+        width: 100%;
+        height: auto;
+        filter: drop-shadow(0 20px 30px rgba(0,0,0,.35));
+    }
+
+    /* --- Cards --- */
+    .fe-card {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        padding: 18px;
+        height: 100%;
+        transition: all .25s ease;
+        box-shadow: 0 6px 18px rgba(2,8,23,.06);
+    }
+    .fe-card:hover { transform: translateY(-4px); box-shadow: 0 10px 26px rgba(2,8,23,.12); }
+    .fe-icon {
+        width: 48px; height: 48px; border-radius: 14px;
+        display: inline-flex; align-items: center; justify-content: center;
+        background: #f0f9ff; color:#0ea5e9; margin-bottom: 10px;
+    }
+
+    /* --- CTA band --- */
+    .cta {
+        background: linear-gradient(135deg, #0ea5e9 0%, #22c55e 100%);
+        color:#fff;
+        border-radius: 18px;
+        padding: 22px;
+        margin: 26px 0;
+        box-shadow: 0 8px 24px rgba(2,8,23,.18);
+    }
+
+    /* --- Stats --- */
+    .stat {
+        border-radius: 14px; background:#0b1220; color:#e2f2ff;
+        padding: 18px; text-align:center;
+    }
+    .stat .num { font-weight:800; font-size: 28px; color:#38bdf8; }
+    .stat small { color:#b8ddff; }
+
+    @@media (min-width: 992px) {
+        .hero { padding: 64px; }
+    }
+</style>
+
+<div class="container rtl">
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-6 order-lg-2 text-center">
+                <!-- Illustration: جعبه/کارتن به‌صورت SVG تولیدی -->
+                <svg class="hero-ill" viewBox="0 0 740 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="کارتن‌بندی و بسته‌بندی">
+                    <defs>
+                        <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#38bdf8" />
+                            <stop offset="100%" stop-color="#22c55e" />
+                        </linearGradient>
+                        <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#1f2937" />
+                            <stop offset="100%" stop-color="#0b1220" />
+                        </linearGradient>
+                    </defs>
+
+                    <!-- پایه -->
+                    <ellipse cx="370" cy="470" rx="260" ry="36" fill="rgba(2,8,23,.45)" />
+                    <!-- جعبه اصلی -->
+                    <g transform="translate(120,80)">
+                        <!-- بدنه -->
+                        <path d="M80 80 L260 20 L440 80 L440 260 L260 320 L80 260 Z" fill="#101827" stroke="#38bdf8" stroke-width="2" />
+                        <!-- خطوط راهنما -->
+                        <path d="M260 20 L260 320" stroke="#0ea5e9" stroke-opacity=".5" stroke-width="2" stroke-dasharray="6 6" />
+                        <!-- درب‌ها -->
+                        <path d="M80 80 L260 140 L440 80" fill="url(#g2)" />
+                        <path d="M80 80 L0 40 L180 -20 L260 20 Z" fill="#0f172a" stroke="#22c55e" stroke-width="2" />
+                        <path d="M440 80 L520 40 L340 -20 L260 20 Z" fill="#0f172a" stroke="#22c55e" stroke-width="2" />
+                        <!-- لیبل -->
+                        <rect x="290" y="170" width="110" height="70" rx="8" fill="url(#g1)" opacity=".15" stroke="#38bdf8" />
+                        <rect x="300" y="182" width="88" height="12" rx="6" fill="#38bdf8" />
+                        <rect x="300" y="202" width="70" height="10" rx="5" fill="#38bdf8" opacity=".75" />
+                        <!-- لوگوی ساده -->
+                        <g transform="translate(120,170)">
+                            <rect x="0" y="0" width="86" height="86" rx="14" fill="url(#g1)" opacity=".12" stroke="#22c55e" />
+                            <path d="M12 60 L43 30 L74 60" fill="none" stroke="#22c55e" stroke-width="4" stroke-linecap="round" />
+                            <path d="M18 52 L43 30 L68 52" fill="none" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" />
+                        </g>
+                    </g>
+                </svg>
+            </div>
+
+            <div class="col-lg-6 order-lg-1">
+                <h1 class="fw-800 mb-2">
+                    سامانه‌ی مدیریت فروش و محاسبه قیمت <span class="text-brand">کارتن محمد</span>
+                </h1>
+                <p class="mb-4">
+                    از ثبت مشتری و سفارش تا محاسبه‌ی دقیق قیمت بر اساس ترکیب کاغذ، گرماژ، فلوت و هزینه‌های نهایی—همه‌چیز در یک پنل یکپارچه، سریع و قابل اعتماد.
+                </p>
+                <div class="d-flex gap-2 flex-wrap">
+                    <a class="btn btn-brand btn-lg" href="@Url.Action("Index","Products")">مدیریت محصولات</a>
+                    <a class="btn btn-outline-light btn-lg" href="@Url.Action("Index","Tb_Order")">ثبت سفارش جدید</a>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <div class="row">
-        <section class="col-md-4" aria-labelledby="gettingStartedTitle">
-            <h2 id="gettingStartedTitle">Getting started</h2>
-            <p>
-                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-                enables a clean separation of concerns and gives you full control over markup
-                for enjoyable, agile development.
-            </p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="librariesTitle">
-            <h2 id="librariesTitle">Get more libraries</h2>
-            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="hostingTitle">
-            <h2 id="hostingTitle">Web Hosting</h2>
-            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-        </section>
-    </div>
-</main>
+    <!-- STATS -->
+    <section class="row g-3 mb-3">
+        <div class="col-6 col-md-3">
+            <div class="stat">
+                <div class="num">+۲,۴۵۰</div>
+                <small>سفارش تکمیل‌شده</small>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat">
+                <div class="num">+۴۸۰</div>
+                <small>مشتری فعال</small>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat">
+                <div class="num">+۱,۲۰۰</div>
+                <small>محصول ثبت‌شده</small>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat">
+                <div class="num">۹۹٫۹٪</div>
+                <small>دقت محاسبات</small>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="row g-3">
+        <div class="col-md-4">
+            <div class="fe-card">
+                <div class="fe-icon">
+                    <span class="bi bi-box-seam" aria-hidden="true"></span>
+                </div>
+                <h5 class="fw-800 mb-1">محصولات و ترکیب کاغذ</h5>
+                <p class="mb-3 text-muted">
+                    تعریف محصول با ابعاد، فلوت (C/B/E/CB/CE/BE)، گرماژ، مصرف، قالب و تصویر—همراه با ترکیب‌های اصلی و جایگزین کاغذ.
+                </p>
+                <a href="@Url.Action("Index","Products")" class="btn btn-sm btn-brand">برو به محصولات</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="fe-card">
+                <div class="fe-icon">
+                    <span class="bi bi-journal-text" aria-hidden="true"></span>
+                </div>
+                <h5 class="fw-800 mb-1">CRM و پیگیری مشتری</h5>
+                <p class="mb-3 text-muted">
+                    ثبت فعالیت‌های بازاریابی، زمان تماس بعدی، وضعیت جلسه و گرید مشتری—همه در یک جا.
+                </p>
+                <a href="@Url.Action("Index","crm_CustomerMarketingActivities")" class="btn btn-sm btn-brand">مدیریت فعالیت‌ها</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="fe-card">
+                <div class="fe-icon">
+                    <span class="bi bi-cash-coin" aria-hidden="true"></span>
+                </div>
+                <h5 class="fw-800 mb-1">محاسبه هوشمند هزینه‌ها</h5>
+                <p class="mb-3 text-muted">
+                    پشتیبانی از هزینه‌های ثابت/درصدی (حمل، سود، مالیات و …) با اولویت محاسبه و نمایش در فاکتور.
+                </p>
+                <a href="@Url.Action("Index","FinalCharges")" class="btn btn-sm btn-brand">هزینه‌های نهایی</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- QUICK LINKS -->
+    <section class="cta mt-4">
+        <div class="row align-items-center g-3">
+            <div class="col-lg-8">
+                <h4 class="fw-800 mb-1">همین حالا شروع کن</h4>
+                <p class="mb-0">برای ادامهٔ کار یکی از گزینه‌های زیر را انتخاب کن.</p>
+            </div>
+            <div class="col-lg-4 text-lg-start text-center">
+                <div class="d-flex gap-2 flex-wrap justify-content-lg-end justify-content-center">
+                    <a class="btn btn-light" href="@Url.Action("Index","Tb_Paper")">تعریف کاغذ</a>
+                    <a class="btn btn-dark" href="@Url.Action("Index","Tb_Catgori")">دسته‌بندی‌ها</a>
+                    <a class="btn btn-outline-light" href="@Url.Action("Index","Customers")">مشتریان</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<!-- اگر Bootstrap Icons داری -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />

@@ -1,51 +1,181 @@
 ﻿@model IEnumerable<cartonmohamad_sales.Models.Customer>
-
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "مشتریان";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<div class="container-fluid py-4" dir="rtl">
+    <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
+        <h2 class="m-0">مشتریان</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Customer1)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.company_name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Status)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.payment_behavior)
-        </th>
-        <th></th>
-    </tr>
+        <div class="ms-auto d-flex align-items-center gap-2">
+            <div class="input-group">
+                <span class="input-group-text">
+                    <i class="fa fa-search"></i>
+                </span>
+                <input id="q" type="text" class="form-control" placeholder="جست‌وجو در همه‌ی ستون‌ها..." />
+                <button id="btnClear" type="button" class="btn btn-outline-secondary">پاک‌کردن</button>
+            </div>
+            @Html.ActionLink("ایجاد مشتری جدید", "Create", null, new { @class = "btn btn-primary" })
+        </div>
+    </div>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Customer1)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.company_name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Status)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.payment_behavior)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
-        </td>
-    </tr>
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table id="tbl" class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>@Html.DisplayNameFor(m => m.First().Customer1)</th>
+                            <th>@Html.DisplayNameFor(m => m.First().company_name)</th>
+                            <th>@Html.DisplayNameFor(m => m.First().Status)</th>
+                            <th>@Html.DisplayNameFor(m => m.First().payment_behavior)</th>
+                            <th class="text-center">عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="searchable">@Html.DisplayFor(_ => item.Customer1)</td>
+                                <td class="searchable">@Html.DisplayFor(_ => item.company_name)</td>
+                                <td class="searchable">@Html.DisplayFor(_ => item.Status)</td>
+                                <td class="searchable">@Html.DisplayFor(_ => item.payment_behavior)</td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-sm flex-wrap" role="group">
+                                        <!-- دکمه ثبت فاکتور -->
+                                        <a class="btn btn-success"
+                                           href="@Url.Action("Create", "Tb_Order", new { J_ID_Customer = item.ID })"
+                                           title="ثبت فاکتور برای این مشتری">
+                                            <i class="fa fa-file-invoice ms-1"></i> ثبت فاکتور
+                                        </a>
+
+                                        <!-- دکمه فعالیت‌های بازاریابی (می‌تونی Create یا Index بگذاری) -->
+                                        <a class="btn btn-warning"
+                                           href="@Url.Action("Index", "crm_CustomerMarketingActivities", new { customerId = item.ID })"
+                                           title="مشاهده/ثبت فعالیت‌های بازاریابی">
+                                            <i class="fa fa-bullhorn ms-1"></i> فعالیت‌های بازاریابی
+                                        </a>
+
+                                        @* دکمه‌های قبلی *@
+                                        @Html.ActionLink("ویرایش", "Edit", new { id = item.ID }, new { @class = "btn btn-outline-primary" })
+                                        @Html.ActionLink("جزئیات", "Details", new { id = item.ID }, new { @class = "btn btn-outline-secondary" })
+                                        @Html.ActionLink("حذف", "Delete", new { id = item.ID }, new { @class = "btn btn-outline-danger" })
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer d-flex justify-content-between align-items-center small">
+            <span id="statTotal"></span>
+            <span id="statFiltered"></span>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        mark {
+            padding: .15rem .25rem;
+            border-radius: .25rem;
+            background: #fff3cd;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        /* برای راست‌به‌چپ */
+        .input-group > .form-control {
+            text-align: right;
+        }
+    </style>
 }
 
-</table>
+@section Scripts {
+    <script>
+(function () {
+    const q = document.getElementById('q');
+    const btnClear = document.getElementById('btnClear');
+    const tbl = document.getElementById('tbl');
+    const rows = Array.from(tbl.tBodies[0].rows);
+    const statTotal = document.getElementById('statTotal');
+    const statFiltered = document.getElementById('statFiltered');
+
+    // ذخیره متن خام سلول‌ها (برای حذف هایلایت در سرچ بعدی)
+    rows.forEach(r => {
+        r.querySelectorAll('.searchable').forEach(td => {
+            td.dataset.raw = td.textContent.trim();
+        });
+    });
+
+    statTotal.textContent = `تعداد کل: ${rows.length.toLocaleString('fa-IR')}`;
+    statFiltered.textContent = `نمایش: ${rows.length.toLocaleString('fa-IR')}`;
+
+    function escapeRegExp(s) {
+        return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function clearHighlights(row) {
+        row.querySelectorAll('.searchable').forEach(td => {
+            td.innerHTML = td.dataset.raw || td.textContent;
+        });
+    }
+
+    function highlight(cell, query) {
+        const raw = cell.dataset.raw || cell.textContent;
+        const re = new RegExp(escapeRegExp(query), 'gi');
+        cell.innerHTML = raw.replace(re, m => `<mark>${m}</mark>`);
+    }
+
+    function filter() {
+        const value = q.value.trim();
+        let shown = 0;
+
+        rows.forEach(row => {
+            clearHighlights(row);
+
+            if (!value) {
+                row.classList.remove('d-none'); shown++;
+                return;
+            }
+
+            const cells = row.querySelectorAll('.searchable');
+            const hit = Array.from(cells).some(td => (td.dataset.raw || td.textContent).toLowerCase().includes(value.toLowerCase()));
+
+            if (hit) {
+                row.classList.remove('d-none'); shown++;
+                // هایلایت همه‌ی سلول‌های دارای تطبیق
+                cells.forEach(td => {
+                    if ((td.dataset.raw || td.textContent).toLowerCase().includes(value.toLowerCase())) {
+                        highlight(td, value);
+                    }
+                });
+            } else {
+                row.classList.add('d-none');
+            }
+        });
+
+        statFiltered.textContent = `نمایش: ${shown.toLocaleString('fa-IR')}`;
+    }
+
+    // جست‌وجوی لحظه‌ای با تاخیر کوتاه (debounce)
+    let t;
+    q.addEventListener('input', function () {
+        clearTimeout(t);
+        t = setTimeout(filter, 120);
+    });
+
+    btnClear.addEventListener('click', function () {
+        q.value = '';
+        filter();
+        q.focus();
+    });
+
+    // فوکوس اولیه
+    setTimeout(() => q.focus(), 200);
+})();
+    </script>
+}

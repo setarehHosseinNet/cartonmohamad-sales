@@ -1,0 +1,83 @@
+﻿@model cartonmohamad_sales.Models.OverheadCost
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>OverheadCost</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.is_required)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.is_required)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.calc_method)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.calc_method)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.quantity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.quantity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.qty_per_meter)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.qty_per_meter)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.unit_price_irr)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.unit_price_irr)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.show_on_invoice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.show_on_invoice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.price)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.overhead_id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,106 @@
+﻿@model IEnumerable<cartonmohamad_sales.Models.ProductImage>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.file_url)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.storage_provider)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.alt_text)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.caption)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.is_primary)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.sort_order)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mime_type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.width_px)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.height_px)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.size_bytes)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.checksum_sha1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.created_at)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Product.product_code)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.file_url)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.storage_provider)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.alt_text)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.caption)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.is_primary)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.sort_order)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.mime_type)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.width_px)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.height_px)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.size_bytes)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.checksum_sha1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.created_at)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Product.product_code)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.image_id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.image_id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.image_id })
+        </td>
+    </tr>
+}
+
+</table>

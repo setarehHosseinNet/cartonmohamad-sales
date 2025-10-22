@@ -1,66 +1,139 @@
 ﻿@model cartonmohamad_sales.Models.Customer
-
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "ویرایش مشتری";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Edit</h2>
+<div class="container py-4" dir="rtl">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">@Html.ActionLink("مشتریان", "Index")</li>
+            <li class="breadcrumb-item active" aria-current="page">ویرایش مشتری</li>
+        </ol>
+    </nav>
 
-
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Customer</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.ID)
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Customer1, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Customer1, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Customer1, "", new { @class = "text-danger" })
-            </div>
+    <div class="card shadow-sm">
+        <div class="card-header d-flex align-items-center justify-content-between">
+            <h5 class="m-0">
+                <i class="fa fa-user-pen ms-2"></i>
+                ویرایش اطلاعات مشتری
+            </h5>
+            @Html.ActionLink("بازگشت به فهرست", "Index", null, new { @class = "btn btn-outline-secondary btn-sm" })
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.company_name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.company_name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.company_name, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "needs-validation", novalidate = "novalidate" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.ID)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
-            </div>
-        </div>
+            <div class="card-body">
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        @Html.ValidationSummary(true, "لطفاً خطاهای زیر را برطرف کنید:", new { @class = "mb-0" })
+                    </div>
+                }
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.payment_behavior, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.payment_behavior, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.payment_behavior, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">@Html.DisplayNameFor(m => m.Customer1) <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa fa-id-card"></i></span>
+                            @Html.TextBoxFor(m => m.Customer1, new { @class = "form-control", placeholder = "نام مشتری" })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.Customer1, "", new { @class = "text-danger small" })
+                    </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                    <div class="col-md-6">
+                        <label class="form-label">@Html.DisplayNameFor(m => m.company_name)</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa fa-building"></i></span>
+                            @Html.TextBoxFor(m => m.company_name, new { @class = "form-control", placeholder = "نام شرکت/فروشگاه (اختیاری)" })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.company_name, "", new { @class = "text-danger small" })
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">@Html.DisplayNameFor(m => m.Status)</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa fa-toggle-on"></i></span>
+                            @Html.DropDownListFor(
+                                m => m.Status,
+                                new SelectList(new[]
+                                {
+                                    new { Value = "فعال", Text = "فعال" },
+                                    new { Value = "غیرفعال", Text = "غیرفعال" },
+                                    new { Value = "در حال پیگیری", Text = "در حال پیگیری" },
+                                    new { Value = "مشتری بالقوه", Text = "مشتری بالقوه" }
+                                }, "Value", "Text", Model?.Status),
+                                "انتخاب وضعیت...",
+                                new { @class = "form-select" })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.Status, "", new { @class = "text-danger small" })
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">@Html.DisplayNameFor(m => m.payment_behavior)</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa fa-credit-card"></i></span>
+                            @Html.DropDownListFor(
+                                m => m.payment_behavior,
+                                new SelectList(new[]
+                                {
+                                    new { Value = "خوش‌حساب", Text = "خوش‌حساب" },
+                                    new { Value = "متوسط", Text = "متوسط" },
+                                    new { Value = "بدحساب", Text = "بدحساب" }
+                                }, "Value", "Text", Model?.payment_behavior),
+                                "انتخاب رفتار پرداخت...",
+                                new { @class = "form-select" })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.payment_behavior, "", new { @class = "text-danger small" })
+                    </div>
+                </div>
             </div>
-        </div>
+
+            <div class="card-footer d-flex justify-content-between">
+                <div class="text-muted small">
+                    تغییرات پس از ذخیره اعمال می‌شود.
+                </div>
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-save ms-1"></i> ذخیره تغییرات
+                    </button>
+                    @Html.ActionLink("انصراف", "Index", null, new { @class = "btn btn-outline-secondary" })
+                </div>
+            </div>
+        }
     </div>
-}
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
 </div>
 
-@section Scripts {
+@section Styles{
+    <style>
+        [dir="rtl"] .input-group > .form-control, [dir="rtl"] .form-select {
+            text-align: right;
+        }
+
+        .card {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+    </style>
+}
+
+@section Scripts{
     @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        // فعال‌سازی ظاهر ولیدیشن Bootstrap
+        (function () {
+            const form = document.querySelector('form.needs-validation');
+            if (!form) return;
+            form.addEventListener('submit', function (e) {
+                if (!form.checkValidity()) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            });
+        })();
+    </script>
 }

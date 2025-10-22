@@ -1,0 +1,123 @@
+﻿@model cartonmohamad_sales.Models.ProductImage
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ProductImage</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.file_url)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.file_url)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.storage_provider)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.storage_provider)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.alt_text)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.alt_text)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.caption)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.caption)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.is_primary)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.is_primary)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.sort_order)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.sort_order)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mime_type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mime_type)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.width_px)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.width_px)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.height_px)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.height_px)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.size_bytes)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.size_bytes)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.checksum_sha1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.checksum_sha1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.created_at)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.created_at)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Product.product_code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Product.product_code)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.image_id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

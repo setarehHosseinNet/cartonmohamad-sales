@@ -49,8 +49,10 @@ namespace cartonmohamad_sales.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "ID,Customer1,company_name,Status,payment_behavior")] Customer customer)
         {
+         
             if (ModelState.IsValid)
             {
+             
                 db.Customers.Add(customer);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");

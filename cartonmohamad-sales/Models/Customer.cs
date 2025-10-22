@@ -48,11 +48,10 @@ namespace cartonmohamad_sales.Models
         public string Status { get; set; }
 
         // خوش‌حسابی: good/average/bad
-        [StringLength(10)]
         [Display(Name = "وضعیت پرداختی")]
-        [RegularExpression(@"^(good|average|bad)$",
-            ErrorMessage = "مقدار معتبر برای وضعیت پرداختی: good, average, bad")]
+        [StringLength(20)]
         public string payment_behavior { get; set; }
+
 
         // فیلد همزمانی (اختیاری ولی مفید برای جلوگیری از overwrite)
         [Timestamp]
