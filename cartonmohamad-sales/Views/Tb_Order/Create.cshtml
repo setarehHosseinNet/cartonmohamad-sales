@@ -1,81 +1,380 @@
 ﻿@model cartonmohamad_sales.Models.Tb_Order
-
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "ثبت سفارش / فاکتور";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    // اگر اکشن Create(customerId) مشتری را پاس داده:
+    var cust = ViewBag.Customer as cartonmohamad_sales.Models.Customer;
 }
 
-<h2>Create</h2>
-
-
-@using (Html.BeginForm()) 
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Tb_Order</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.J_ID_Customer, "J_ID_Customer", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("J_ID_Customer", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.J_ID_Customer, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Number_order, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Number_order, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Number_order, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.J_ID_Facktor, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.J_ID_Facktor, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.J_ID_Facktor, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Number_ORder_rahkaran, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Number_ORder_rahkaran, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Number_ORder_rahkaran, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
+<div class="container py-4" dir="rtl">
+    <div class="d-flex align-items-center mb-3">
+        <h2 class="m-0">ثبت سفارش / فاکتور</h2>
+        <div class="ms-auto">
+            @Html.ActionLink("بازگشت به فهرست", "Index", null, new { @class = "btn btn-outline-secondary" })
         </div>
     </div>
-}
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
+    @* نمایش اطلاعات مشتری انتخاب‌شده (اختیاری) *@
+    @if (cust != null)
+    {
+        <div class="alert alert-info d-flex align-items-center gap-3">
+            <i class="fa fa-user-circle fa-lg"></i>
+            <div>
+                <div>
+                    <strong>مشتری:</strong>
+                    <span class="ms-1">@cust.Customer1</span>
+                    @if (!string.IsNullOrWhiteSpace(cust.company_name))
+                    {
+                        <span class="text-muted">— @cust.company_name</span>
+                    }
+                </div>
+                @if (!string.IsNullOrWhiteSpace(cust.payment_behavior))
+                {
+                    <div class="small text-muted mt-1">
+                        وضعیت پرداختی: @cust.payment_behavior
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="row g-4">
+            <!-- کارت: اطلاعات سفارش -->
+            <div class="col-12 col-xxl-6">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-light">
+                        <strong>اطلاعات سفارش</strong>
+                    </div>
+                    <div class="card-body">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
+
+                        <div class="row g-3">
+                            <!-- مشتری -->
+                            <div class="col-md-12">
+                                <label class="form-label">مشتری</label>
+                                @Html.DropDownListFor(m => m.J_ID_Customer,
+                                    (SelectList)ViewBag.J_ID_Customer,
+                                    "-- انتخاب مشتری --",
+                                    new { @class = "form-select" })
+                                @Html.ValidationMessageFor(m => m.J_ID_Customer, "", new { @class = "text-danger" })
+                            </div>
+
+                            <!-- شماره سفارش -->
+                            <div class="col-md-6">
+                                <label class="form-label">شماره سفارش</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa fa-hashtag"></i></span>
+                                    @Html.EditorFor(m => m.Number_order, new { htmlAttributes = new { @class = "form-control", placeholder = "مثلاً 100245" } })
+                                </div>
+                                @Html.ValidationMessageFor(m => m.Number_order, "", new { @class = "text-danger" })
+                            </div>
+
+                            <!-- شناسه/کد فاکتور -->
+                            <div class="col-md-6">
+                                <label class="form-label">کد/شناسه فاکتور</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa fa-file-invoice"></i></span>
+                                    @Html.EditorFor(m => m.J_ID_Facktor, new { htmlAttributes = new { @class = "form-control", placeholder = "در صورت وجود" } })
+                                </div>
+                                @Html.ValidationMessageFor(m => m.J_ID_Facktor, "", new { @class = "text-danger" })
+                            </div>
+
+                            <!-- شماره سفارش در راهکاران -->
+                            <div class="col-md-6">
+                                <label class="form-label">شماره سفارش در راهکاران</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa fa-barcode"></i></span>
+                                    @Html.EditorFor(m => m.Number_ORder_rahkaran, new { htmlAttributes = new { @class = "form-control", placeholder = "در صورت وجود" } })
+                                </div>
+                                @Html.ValidationMessageFor(m => m.Number_ORder_rahkaran, "", new { @class = "text-danger" })
+                            </div>
+
+                            <!-- وضعیت -->
+                            <div class="col-md-6">
+                                <label class="form-label">وضعیت</label>
+                                @Html.DropDownListFor(m => m.Status,
+                                    new SelectList(new[]
+                                    {
+                                        new { Value = "new",           Text = "جدید" },
+                                        new { Value = "approved",      Text = "تایید شده" },
+                                        new { Value = "in_production", Text = "در حال تولید" },
+                                        new { Value = "shipped",       Text = "ارسال شده" }
+                                    }, "Value", "Text", Model?.Status),
+                                    "-- انتخاب وضعیت --",
+                                    new { @class = "form-select" })
+                                @Html.ValidationMessageFor(m => m.Status, "", new { @class = "text-danger" })
+                            </div>
+
+                            <!-- تاریخ سفارش (اتصال به تقویم شمسی در Script) -->
+                            <div class="col-md-6">
+                                <label class="form-label">تاریخ سفارش</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa fa-calendar-alt"></i></span>
+                                    @Html.TextBoxFor(m => m.Date,
+                                        new { @class = "form-control persian-date", placeholder = "تاریخ را انتخاب کنید" })
+                                </div>
+                                @Html.ValidationMessageFor(m => m.Date, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer d-flex justify-content-between">
+                        @Html.ActionLink("انصراف", "Index", null, new { @class = "btn btn-outline-secondary" })
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-save ms-1"></i> ذخیره سفارش
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- کارت: مشخصات کارتن / محصول -->
+            <div class="col-12 col-xxl-6">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-light">
+                        <strong>مشخصات کارتن / محصول</strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+
+                            <!-- کد محصول -->
+                            <div class="col-md-6">
+                                <label class="form-label">کد محصول</label>
+                                <input type="text" class="form-control" name="Product.Code" placeholder="مثلاً C-2025" />
+                            </div>
+
+                            <!-- نوع کارتن -->
+                            <div class="col-md-6">
+                                <label class="form-label">نوع کارتن</label>
+                                <select class="form-select" name="Product.Type" id="productType">
+                                    <option value="">-- انتخاب کنید --</option>
+                                    <option value="regular">معمولی</option>
+                                    <option value="die_cut">دایکاتی</option>
+                                    <option value="laminated">لمینتی</option>
+                                    <option value="sheet">ورق</option>
+                                </select>
+                            </div>
+
+                            <!-- نام کارتن -->
+                            <div class="col-md-6">
+                                <label class="form-label">نام کارتن</label>
+                                <input type="text" class="form-control" name="Product.Name" placeholder="نام طرح/کارتن" />
+                            </div>
+
+                            <!-- تیراژ -->
+                            <div class="col-md-6">
+                                <label class="form-label">تیراژ</label>
+                                <input type="number" min="0" class="form-control" name="Product.Tirage" placeholder="مثلاً 5000" />
+                            </div>
+
+                            <!-- توضیحات -->
+                            <div class="col-12">
+                                <label class="form-label">توضیحات</label>
+                                <textarea class="form-control" rows="2" name="Product.Description" placeholder="توضیحات تکمیلی ..."></textarea>
+                            </div>
+
+                            <!-- چند لایه (3/5) -->
+                            <div class="col-md-6">
+                                <label class="form-label d-block mb-1">چند لایه</label>
+                                <div class="btn-group" role="group" aria-label="layers">
+                                    <input type="radio" class="btn-check" name="Product.Layers" id="layer3" value="3" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="layer3">۳ لایه</label>
+
+                                    <input type="radio" class="btn-check" name="Product.Layers" id="layer5" value="5" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="layer5">۵ لایه</label>
+                                </div>
+                            </div>
+
+                            <!-- چند تیکه -->
+                            <div class="col-md-6">
+                                <label class="form-label d-block mb-1">چند تیکه</label>
+                                <div class="btn-group" role="group" aria-label="pieces">
+                                    <input type="radio" class="btn-check" name="Product.Pieces" id="piece1" value="1" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="piece1">یک تیکه</label>
+
+                                    <input type="radio" class="btn-check" name="Product.Pieces" id="pieceHalf" value="half" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="pieceHalf">نیم کارتن</label>
+
+                                    <input type="radio" class="btn-check" name="Product.Pieces" id="piece4" value="4" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="piece4">چهار تیکه</label>
+                                </div>
+                            </div>
+
+                            <!-- نوع درب -->
+                            <div class="col-md-6">
+                                <label class="form-label d-block mb-1">نوع درب</label>
+                                <div class="btn-group" role="group" aria-label="door_type">
+                                    <input type="radio" class="btn-check" name="Product.DoorType" id="doorOpen" value="open_unbalanced" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="doorOpen">باز/نامتوازن</label>
+
+                                    <input type="radio" class="btn-check" name="Product.DoorType" id="doorClosed" value="closed" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="doorClosed">بسته</label>
+
+                                    <input type="radio" class="btn-check" name="Product.DoorType" id="doorDouble" value="double" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="doorDouble">دوبل</label>
+                                </div>
+                            </div>
+
+                            <!-- تعداد درب -->
+                            <div class="col-md-6">
+                                <label class="form-label d-block mb-1">تعداد درب</label>
+                                <div class="btn-group" role="group" aria-label="doors_count">
+                                    <input type="radio" class="btn-check" name="Product.DoorsCount" id="door0" value="0" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="door0">بدون درب</label>
+
+                                    <input type="radio" class="btn-check" name="Product.DoorsCount" id="door1" value="1" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="door1">تک‌درب</label>
+
+                                    <input type="radio" class="btn-check" name="Product.DoorsCount" id="door2" value="2" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="door2">دودرب</label>
+                                </div>
+                            </div>
+
+                            <!-- ابعاد (فقط وقتی نوع = معمولی) -->
+                            <div class="col-12 d-none" id="regularDims">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label">طول (cm)</label>
+                                        <input type="number" step="0.1" min="0" class="form-control"
+                                               name="Product.LengthCm" id="lengthCm" placeholder="مثلاً 30.5" />
+                                        <div class="form-text">واحد: سانتی‌متر</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">عرض (cm)</label>
+                                        <input type="number" step="0.1" min="0" class="form-control"
+                                               name="Product.WidthCm" id="widthCm" placeholder="مثلاً 20" />
+                                        <div class="form-text">واحد: سانتی‌متر</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">ارتفاع (cm)</label>
+                                        <input type="number" step="0.1" min="0" class="form-control"
+                                               name="Product.HeightCm" id="heightCm" placeholder="مثلاً 15" />
+                                        <div class="form-text">واحد: سانتی‌متر</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ابعاد ویژه حالت دایکاتی (وقتی نوع = دایکاتی) -->
+                            <div class="col-12 d-none" id="dieCutDims">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">تیغ به تیغ (طول قالب) - cm</label>
+                                        <input type="number" step="0.1" min="0" class="form-control"
+                                               name="Product.DieToDieLengthCm" id="dieToDieLengthCm" placeholder="مثلاً 85.0" />
+                                        <div class="form-text">واحد: سانتی‌متر</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">عرض قالب - cm</label>
+                                        <input type="number" step="0.1" min="0" class="form-control"
+                                               name="Product.MoldWidthCm" id="moldWidthCm" placeholder="مثلاً 115.0" />
+                                        <div class="form-text">واحد: سانتی‌متر</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div> <!-- /row -->
+                    </div>
+
+                    <div class="card-footer small text-muted">
+                        نکته: اطلاعات «کارتن/محصول» با نام‌های <code>Product.*</code> ارسال می‌شوند تا بعداً با API/VM متصل شوند.
+                    </div>
+                </div>
+            </div>
+        </div> <!-- /row -->
+
+        <div class="text-end mt-3 d-xl-none">
+            <button type="submit" class="btn btn-primary">
+                <i class="fa fa-save ms-1"></i> ذخیره سفارش
+            </button>
+        </div>
+    }
 </div>
 
-@section Scripts {
+@section Styles{
+    <style>
+        [dir="rtl"] .form-label {
+            font-weight: 600;
+        }
+
+        .card {
+            border-radius: 12px;
+        }
+
+        .input-group-text {
+            min-width: 42px;
+            justify-content: center;
+        }
+    </style>
+}
+
+@section Scripts{
     @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        // اگر از Persian Datepicker استفاده می‌کنید:
+        // $('.persian-date').persianDatepicker({ format: 'YYYY/MM/DD' });
+
+        (function () {
+            const typeSelect = document.getElementById('productType');
+
+            // معمولی: طول/عرض/ارتفاع
+            const regularBox = document.getElementById('regularDims');
+            const lengthInp = document.getElementById('lengthCm');
+            const widthInp = document.getElementById('widthCm');
+            const heightInp = document.getElementById('heightCm');
+
+            // دایکاتی: تیغ به تیغ/عرض قالب
+            const dieCutBox = document.getElementById('dieCutDims');
+            const dieLenInp = document.getElementById('dieToDieLengthCm');
+            const moldWidInp = document.getElementById('moldWidthCm');
+
+            if (!typeSelect) return;
+
+            function setRequired(inputs, on) {
+                inputs.forEach(inp => {
+                    if (!inp) return;
+                    if (on) {
+                        inp.setAttribute('required', 'required');
+                    } else {
+                        inp.removeAttribute('required');
+                        if (inp.setCustomValidity) inp.setCustomValidity('');
+                    }
+                });
+
+                // اگر jQuery Validate فعاله، قوانین را پویا اضافه/حذف کن
+                if (window.jQuery && jQuery.validator) {
+                    const rules = { required: true, number: true, min: 0, messages: { required: "این فیلد الزامی است" } };
+                    inputs.forEach(inp => {
+                        if (!inp) return;
+                        const $i = $(inp);
+                        try {
+                            if (on) $i.rules('add', rules);
+                            else $i.rules('remove');
+                        } catch (e) { }
+                    });
+                }
+            }
+
+            function toggleDims() {
+                const t = (typeSelect.value || '').toLowerCase();
+
+                const isRegular = (t === 'regular');
+                const isDieCut = (t === 'die_cut');
+
+                // نمایش/عدم نمایش
+                if (regularBox) regularBox.classList.toggle('d-none', !isRegular);
+                if (dieCutBox) dieCutBox.classList.toggle('d-none', !isDieCut);
+
+                // required پویا
+                setRequired([lengthInp, widthInp, heightInp], isRegular);
+                setRequired([dieLenInp, moldWidInp], isDieCut);
+            }
+
+            typeSelect.addEventListener('change', toggleDims);
+            toggleDims(); // بار اول
+        })();
+    </script>
 }

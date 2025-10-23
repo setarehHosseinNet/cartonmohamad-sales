@@ -15,13 +15,24 @@ namespace cartonmohamad_sales.Controllers
     {
         private CartonMohamad_PriceEntities db = new CartonMohamad_PriceEntities();
 
-        // GET: Tb_Order
-        public async Task<ActionResult> Index()
+        [HttpGet]
+        public async Task<ActionResult> Index(int? customerId)
         {
-            var tb_Order = db.Tb_Order.Include(t => t.Customer);
-            return View(await tb_Order.ToListAsync());
-        }
+            var q = db.Tb_Order
+                      .Include(o => o.Customer)
+                      .AsQueryable();
 
+            if (customerId.HasValue)
+            {
+                q = q.Where(o => o.J_ID_Customer == customerId.Value);
+                var cust = await db.Customers.FindAsync(customerId.Value);
+                ViewBag.CustomerId = customerId.Value;
+                ViewBag.CustomerName = cust?.Customer1 ?? "نامشخص";
+            }
+
+            var list = await q.OrderByDescending(o => o.Date).ToListAsync();
+            return View(list);
+        }
         // GET: Tb_Order/Details/5
         public async Task<ActionResult> Details(long? id)
         {
@@ -37,11 +48,40 @@ namespace cartonmohamad_sales.Controllers
             return View(tb_Order);
         }
 
+
         // GET: Tb_Order/Create
-        public ActionResult Create()
+        // GET: Tb_Order/Create
+        public ActionResult Create(int? customerId, int? J_ID_Customer)
         {
-            ViewBag.J_ID_Customer = new SelectList(db.Customers, "ID", "Customer1");
-            return View();
+            // هر کدام بود، همان را استفاده کن
+            var id = J_ID_Customer ?? customerId;
+
+            // لیست مشتری‌ها برای دراپ‌دان؛ اگر id داشت، همون رو انتخاب کن
+            var customers = db.Customers
+                              .AsNoTracking()
+                              .OrderBy(c => c.Customer1)
+                              .ToList();
+
+            ViewBag.J_ID_Customer = new SelectList(customers, "ID", "Customer1", id);
+
+            // مدل سفارش
+            var model = new Tb_Order
+            {
+                J_ID_Customer = id ?? 0,               // اگر نداشت 0 می‌ماند (یا خالی نگه دار اگر nullable است)
+                Date = DateTime.Now                    // اگر فیلد Date nullable است می‌تونی این خط رو برداری
+            };
+
+            // اگر id داریم، اطلاعات مشتری را هم برای ویو بفرست
+            if (id.HasValue)
+            {
+                var customer = db.Customers.Find(id.Value);
+                if (customer == null) return HttpNotFound();
+
+                // برای نمایش در ویو
+                ViewBag.Customer = customer;
+            }
+
+            return View(model);
         }
 
         // POST: Tb_Order/Create

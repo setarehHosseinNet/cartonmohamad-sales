@@ -45,7 +45,7 @@
                                     <div class="btn-group btn-group-sm flex-wrap" role="group">
                                         <!-- دکمه ثبت فاکتور -->
                                         <a class="btn btn-success"
-                                           href="@Url.Action("Create", "Tb_Order", new { J_ID_Customer = item.ID })"
+                                           href="@Url.Action("Index", "Tb_Order", new { customerId = item.ID })"
                                            title="ثبت فاکتور برای این مشتری">
                                             <i class="fa fa-file-invoice ms-1"></i> ثبت فاکتور
                                         </a>
