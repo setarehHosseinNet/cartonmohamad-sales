@@ -1,0 +1,90 @@
+﻿@model cartonmohamad_sales.Models.Customer
+@{
+    ViewBag.Title = "حذف مشتری";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-4" dir="rtl">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">@Html.ActionLink("مشتریان", "Index")</li>
+            <li class="breadcrumb-item active" aria-current="page">حذف مشتری</li>
+        </ol>
+    </nav>
+
+    <div class="alert alert-danger d-flex align-items-center" role="alert">
+        <i class="fa fa-triangle-exclamation ms-2"></i>
+        <div>
+            <strong>تأیید حذف:</strong> مطمئنید می‌خواهید این مشتری را حذف کنید؟ این عملیات قابل بازگشت نیست.
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h5 class="m-0">
+                <i class="fa fa-user ms-2"></i>
+                اطلاعات مشتری
+            </h5>
+        </div>
+
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="list-group">
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span class="text-muted">@Html.DisplayNameFor(m => m.Customer1)</span>
+                            <strong>@Html.DisplayFor(m => m.Customer1)</strong>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span class="text-muted">@Html.DisplayNameFor(m => m.company_name)</span>
+                            <strong>@Html.DisplayFor(m => m.company_name)</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="list-group">
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span class="text-muted">@Html.DisplayNameFor(m => m.Status)</span>
+                            <strong>@Html.DisplayFor(m => m.Status)</strong>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span class="text-muted">@Html.DisplayNameFor(m => m.payment_behavior)</span>
+                            <strong>@Html.DisplayFor(m => m.payment_behavior)</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @using (Html.BeginForm())  // به اکشن DeleteConfirmed پست می‌شود (اسکافلد پیش‌فرض)
+        {
+            @Html.AntiForgeryToken()
+            <div class="card-footer d-flex justify-content-between">
+                @Html.ActionLink("بازگشت به فهرست", "Index", null, new { @class = "btn btn-outline-secondary" })
+
+                <button type="submit" class="btn btn-danger">
+                    <i class="fa fa-trash-can ms-1"></i>
+                    حذف قطعی مشتری
+                </button>
+            </div>
+        }
+    </div>
+</div>
+
+@section Styles{
+    <style>
+        [dir="rtl"] .list-group-item {
+            text-align: right;
+        }
+
+        .card {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .alert i {
+            font-size: 1.1rem;
+        }
+    </style>
+}

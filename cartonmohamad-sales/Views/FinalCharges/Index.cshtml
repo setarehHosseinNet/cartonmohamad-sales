@@ -1,0 +1,76 @@
+﻿@model IEnumerable<cartonmohamad_sales.Models.FinalCharge>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.is_active)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.is_required)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.calc_type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.priority)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.apply_on)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.percent_rate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fixed_amount_irr)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.is_active)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.is_required)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.calc_type)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.priority)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.apply_on)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.percent_rate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fixed_amount_irr)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.final_charge_id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.final_charge_id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.final_charge_id })
+        </td>
+    </tr>
+}
+
+</table>

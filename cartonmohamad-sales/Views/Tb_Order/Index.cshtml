@@ -1,0 +1,243 @@
+﻿@model IEnumerable<cartonmohamad_sales.Models.Tb_Order>
+@{
+    ViewBag.Title = "سفارش‌ها / فاکتورها";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    // اگر کنترلر مقدار بدهد:
+    var filteredCustomerId = ViewBag.CustomerId as int?;
+    var filteredCustomerName = ViewBag.CustomerName as string;
+}
+
+@functions {
+    // تبدیل ساده تاریخ میلادی به شمسی
+    public static string ToShamsi(DateTime? dt)
+    {
+        if (dt == null) return "";
+        var pc = new System.Globalization.PersianCalendar();
+        var g = dt.Value;
+        return string.Format("{0:0000}/{1:00}/{2:00}",
+            pc.GetYear(g), pc.GetMonth(g), pc.GetDayOfMonth(g));
+    }
+
+    public static string StatusClass(string status)
+    {
+        status = (status ?? "").Trim();
+        if (status == "ثبت نهایی" || status == "ارسال شده" || status == "تمام شده") return "bg-success";
+        if (status == "در حال تولید" || status == "در انتظار تایید") return "bg-info";
+        if (status == "لغو شده") return "bg-danger";
+        return "bg-secondary";
+    }
+}
+
+<div class="container-fluid py-4" dir="rtl">
+    @{
+        // اگر در اکشن Index مقدار گذاشته‌ایم:
+        //   ViewBag.CustomerId = customerId;
+        var cid = ViewBag.CustomerId as int?;
+        object routeVals = cid.HasValue ? new { J_ID_Customer = cid.Value } : null;
+    }
+    <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
+        <h2 class="m-0">سفارش‌ها / فاکتورها</h2>
+
+        <div class="ms-auto d-flex align-items-center gap-2">
+            <div class="input-group">
+                <span class="input-group-text"><i class="fa fa-search"></i></span>
+                <input id="q" type="text" class="form-control" placeholder="جست‌وجو در همه‌ی ستون‌ها..." />
+                <button id="btnClear" type="button" class="btn btn-outline-secondary">پاک‌کردن</button>
+            </div>
+
+            @Html.ActionLink(
+                linkText: "ثبت سفارش جدید",
+                actionName: "Create",
+                routeValues: routeVals,                 // اگر cid داشت، J_ID_Customer را پاس می‌دهد
+                htmlAttributes: new { @class = "btn btn-primary" }
+            )
+        </div>
+    </div>
+
+
+    @* اگر از قبل در آدرس فیلتر مشتری داشتیم، چیپِ فیلتر نشان بده *@
+    @if (filteredCustomerId.HasValue)
+    {
+        <div class="alert alert-light d-flex align-items-center gap-2 border mb-3">
+            <span>فیلتر بر اساس مشتری:</span>
+            <span class="badge bg-primary">@filteredCustomerName (@filteredCustomerId)</span>
+            <a class="ms-auto btn btn-sm btn-outline-secondary" href="@Url.Action("Index", "Tb_Order")">
+                حذف فیلتر
+            </a>
+        </div>
+    }
+
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table id="tbl" class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="text-center" style="width:110px;">شماره سفارش</th>
+                            <th class="text-center" style="width:110px;">کد فاکتور</th>
+                            <th class="text-center">شماره رهکاران</th>
+                            <th class="text-center" style="width:120px;">وضعیت</th>
+                            <th class="text-center" style="width:120px;">تاریخ</th>
+                            <th>مشتری</th>
+                            <th class="text-center" style="width:240px;">عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="searchable text-center">@item.Number_order</td>
+                                    <td class="searchable text-center">@item.J_ID_Facktor</td>
+                                    <td class="searchable text-center">@item.Number_ORder_rahkaran</td>
+                                    <td class="searchable text-center">
+                                        @{
+                                            var st = (item.Status ?? "").Trim();
+                                        }
+                                        <span class="badge @StatusClass(st)">@st</span>
+                                    </td>
+                                    <td class="searchable text-center">
+                                        @ToShamsi(item.Date)
+                                    </td>
+                                    <td class="searchable">
+                                        @item.Customer?.Customer1
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group btn-group-sm">
+                                            @Html.ActionLink("ویرایش", "Edit", new { id = item.ID }, new { @class = "btn btn-outline-primary" })
+                                            @Html.ActionLink("جزئیات", "Details", new { id = item.ID }, new { @class = "btn btn-outline-secondary" })
+                                            @Html.ActionLink("حذف", "Delete", new { id = item.ID }, new { @class = "btn btn-outline-danger" })
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center text-muted py-4">سفارش/فاکتوری یافت نشد.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card-footer d-flex justify-content-between align-items-center small">
+            <span id="statTotal"></span>
+            <span id="statFiltered"></span>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        mark {
+            padding: .15rem .25rem;
+            border-radius: .25rem;
+            background: #fff3cd
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f8f9fa
+        }
+
+        .input-group > .form-control {
+            text-align: right
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        (function () {
+            const q = document.getElementById('q');
+            const btnClear = document.getElementById('btnClear');
+            const tbl = document.getElementById('tbl');
+            if (!tbl) return;
+
+            const rows = Array.from(tbl.tBodies[0].rows);
+            const statTotal = document.getElementById('statTotal');
+            const statFiltered = document.getElementById('statFiltered');
+
+            // متن خام برای حذف هایلایت‌ها
+            rows.forEach(r => {
+                r.querySelectorAll('.searchable').forEach(td => {
+                    td.dataset.raw = (td.textContent || '').trim();
+                });
+            });
+
+            statTotal.textContent = `تعداد کل: ${rows.length.toLocaleString('fa-IR')}`;
+            statFiltered.textContent = `نمایش: ${rows.length.toLocaleString('fa-IR')}`;
+
+            function escapeRegExp(s) {
+                return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            }
+
+            function clearHighlights(row) {
+                row.querySelectorAll('.searchable').forEach(td => {
+                    td.innerHTML = td.dataset.raw || td.textContent;
+                });
+            }
+
+            function highlight(cell, query) {
+                const raw = cell.dataset.raw || cell.textContent;
+                if (!query) { cell.innerHTML = raw; return; }
+                const re = new RegExp(escapeRegExp(query), 'gi');
+                cell.innerHTML = raw.replace(re, m => `<mark>${m}</mark>`);
+            }
+
+            function filter() {
+                const value = (q.value || '').trim();
+                let shown = 0;
+
+                rows.forEach(row => {
+                    clearHighlights(row);
+
+                    if (!value) {
+                        row.classList.remove('d-none'); shown++;
+                        return;
+                    }
+
+                    const cells = row.querySelectorAll('.searchable');
+                    const hit = Array.from(cells).some(td =>
+                        (td.dataset.raw || td.textContent || '')
+                            .toLowerCase()
+                            .includes(value.toLowerCase())
+                    );
+
+                    if (hit) {
+                        row.classList.remove('d-none'); shown++;
+                        cells.forEach(td => {
+                            if ((td.dataset.raw || td.textContent || '')
+                                .toLowerCase()
+                                .includes(value.toLowerCase())) {
+                                highlight(td, value);
+                            }
+                        });
+                    } else {
+                        row.classList.add('d-none');
+                    }
+                });
+
+                statFiltered.textContent = `نمایش: ${shown.toLocaleString('fa-IR')}`;
+            }
+
+            let t;
+            q.addEventListener('input', function () {
+                clearTimeout(t);
+                t = setTimeout(filter, 120);
+            });
+
+            btnClear.addEventListener('click', function () {
+                q.value = '';
+                filter();
+                q.focus();
+            });
+
+            setTimeout(() => q && q.focus(), 250);
+        })();
+    </script>
+}

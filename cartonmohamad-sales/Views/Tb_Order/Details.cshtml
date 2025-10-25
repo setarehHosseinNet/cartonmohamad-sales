@@ -1,0 +1,67 @@
+﻿@model cartonmohamad_sales.Models.Tb_Order
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Tb_Order</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Number_order)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Number_order)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.J_ID_Facktor)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.J_ID_Facktor)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Number_ORder_rahkaran)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Number_ORder_rahkaran)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Customer.Customer1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Customer.Customer1)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

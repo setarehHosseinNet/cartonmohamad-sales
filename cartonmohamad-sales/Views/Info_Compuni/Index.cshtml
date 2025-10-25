@@ -1,0 +1,76 @@
+﻿@model IEnumerable<cartonmohamad_sales.Models.Info_Compuni>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.address_factory)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.address_sales_office)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.address_warehouse)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.address_dispatch)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.phone_factory)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.phone_sales_office)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.phone_procurement_manager)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Customer.Customer1)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.address_factory)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.address_sales_office)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.address_warehouse)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.address_dispatch)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.phone_factory)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.phone_sales_office)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.phone_procurement_manager)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Customer.Customer1)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+        </td>
+    </tr>
+}
+
+</table>

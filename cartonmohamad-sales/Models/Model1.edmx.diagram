@@ -13,10 +13,10 @@
         <EntityTypeShape EntityType="CartonMohamad_PriceModel.PaperCombo" Width="1.5" PointX="3" PointY="3.25" />
         <EntityTypeShape EntityType="CartonMohamad_PriceModel.ProductImage" Width="1.5" PointX="3" PointY="10.625" />
         <EntityTypeShape EntityType="CartonMohamad_PriceModel.Product" Width="1.5" PointX="0.75" PointY="9.125" />
-        <EntityTypeShape EntityType="CartonMohamad_PriceModel.sysdiagram" Width="1.5" PointX="5.75" PointY="1.25" />
+        <EntityTypeShape EntityType="CartonMohamad_PriceModel.sysdiagram" Width="1.5" PointX="10.5" PointY="3.625" />
         <EntityTypeShape EntityType="CartonMohamad_PriceModel.Tb_Body_Order" Width="1.5" PointX="10.25" PointY="12.75" />
         <EntityTypeShape EntityType="CartonMohamad_PriceModel.Tb_Catgori" Width="1.5" PointX="3.75" PointY="0.75" />
-        <EntityTypeShape EntityType="CartonMohamad_PriceModel.Tb_join_Categori_Paper" Width="1.5" PointX="6" PointY="4.375" />
+        <EntityTypeShape EntityType="CartonMohamad_PriceModel.Tb_join_Categori_Paper" Width="1.5" PointX="1.125" PointY="1.125" />
         <EntityTypeShape EntityType="CartonMohamad_PriceModel.Tb_Order" Width="1.5" PointX="8" PointY="16.25" />
         <EntityTypeShape EntityType="CartonMohamad_PriceModel.Tb_Paper" Width="1.5" PointX="0.75" PointY="4.125" />
         <AssociationConnector Association="CartonMohamad_PriceModel.FK_crm_CustomerMarketingActivities_Customer" />

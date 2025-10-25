@@ -1,0 +1,76 @@
+﻿@model IEnumerable<cartonmohamad_sales.Models.OverheadCost>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.is_required)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.calc_method)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.quantity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.qty_per_meter)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.unit_price_irr)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.show_on_invoice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.price)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.is_required)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.calc_method)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.quantity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.qty_per_meter)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.unit_price_irr)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.show_on_invoice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.price)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.overhead_id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.overhead_id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.overhead_id })
+        </td>
+    </tr>
+}
+
+</table>

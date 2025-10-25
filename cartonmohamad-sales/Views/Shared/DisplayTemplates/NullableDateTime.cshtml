@@ -1,0 +1,3 @@
+﻿@model System.DateTime?
+@using cartonmohamad_sales.Utilities
+@(Model.HasValue ? Model.Value.ToPersianDate() : "")

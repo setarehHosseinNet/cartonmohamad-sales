@@ -1,0 +1,51 @@
+﻿@model cartonmohamad_sales.Models.Tb_Body_Order
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Tb_Body_Order</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FinalCharge.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FinalCharge.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OverheadCost.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OverheadCost.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Product.product_code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Product.product_code)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tb_Order.Number_ORder_rahkaran)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tb_Order.Number_ORder_rahkaran)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

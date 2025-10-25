@@ -1,0 +1,9 @@
+﻿@model System.DateTime
+@using cartonmohamad_sales.Utilities
+@{
+    var val = Model == default(DateTime) ? "" : Model.ToPersianDate();
+}
+<input name="@ViewData.TemplateInfo.GetFullHtmlFieldName("")"
+       id="@ViewData.TemplateInfo.GetFullHtmlFieldId("")"
+       type="text" class="form-control jdate" autocomplete="off"
+       value="@val" />

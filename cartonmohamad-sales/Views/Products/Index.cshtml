@@ -1,0 +1,184 @@
+﻿@model IEnumerable<cartonmohamad_sales.Models.Product>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.product_code)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.product_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.product_type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tirage)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.layers_count)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.pieces_count)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.door_type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.doors_count)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.length_cm)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.width_cm)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.height_cm)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.sheets_per_order)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.units_per_sheet)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.bottoms_per_sheet)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.flap_total_cm)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.flap_top_cm)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.flap_bottom_cm)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.die_to_die_length_cm)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mold_width_cm)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.bottoms_per_mold)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.industrial_length_cm)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.industrial_width_cm)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.carton_consumption_m2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.grammage_gsm)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.industrial_area_m2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.flute_type)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.product_code)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.product_name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.product_type)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tirage)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.layers_count)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.pieces_count)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.door_type)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.doors_count)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.length_cm)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.width_cm)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.height_cm)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.sheets_per_order)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.units_per_sheet)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.bottoms_per_sheet)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.flap_total_cm)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.flap_top_cm)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.flap_bottom_cm)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.die_to_die_length_cm)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.mold_width_cm)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.bottoms_per_mold)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.industrial_length_cm)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.industrial_width_cm)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.carton_consumption_m2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.grammage_gsm)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.industrial_area_m2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.flute_type)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.product_id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.product_id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.product_id })
+        </td>
+    </tr>
+}
+
+</table>

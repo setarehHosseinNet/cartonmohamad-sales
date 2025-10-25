@@ -1,0 +1,696 @@
+﻿@model cartonmohamad_sales.Models.Tb_Order
+@using System.Linq
+@{
+    ViewBag.Title = "ثبت سفارش / فاکتور";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var cust = ViewBag.Customer as cartonmohamad_sales.Models.Customer;
+
+    // ViewBag.Papers باید در کنترلر پر شده باشد (id,name,price,widths(cat=1),grammages(cat=2))
+    var papers = (IEnumerable<dynamic>)ViewBag.Papers ?? Enumerable.Empty<object>();
+}
+
+<div class="container py-4" dir="rtl">
+    <div class="d-flex align-items-center mb-3">
+        <h2 class="m-0">ثبت سفارش / فاکتور</h2>
+        <div class="ms-auto">
+            @Html.ActionLink("بازگشت به فهرست", "Index", null, new { @class = "btn btn-outline-secondary" })
+        </div>
+    </div>
+
+    @if (cust != null)
+    {
+        <div class="alert alert-info d-flex align-items-center gap-3">
+            <i class="fa fa-user-circle fa-lg"></i>
+            <div>
+                <div>
+                    <strong>مشتری:</strong>
+                    <span class="ms-1">@cust.Customer1</span>
+                    @if (!string.IsNullOrWhiteSpace(cust.company_name))
+                    {<span class="text-muted">— @cust.company_name</span>}
+                </div>
+                @if (!string.IsNullOrWhiteSpace(cust.payment_behavior))
+                {<div class="small text-muted mt-1">وضعیت پرداختی: @cust.payment_behavior</div>}
+            </div>
+        </div>
+    }
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="row g-4">
+            <!-- سفارش -->
+            <div class="col-12 col-xxl-6">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-light"><strong>اطلاعات سفارش</strong></div>
+                    <div class="card-body">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
+
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <label class="form-label">مشتری</label>
+                                @Html.DropDownListFor(m => m.J_ID_Customer,
+                                                   (SelectList)ViewBag.J_ID_Customer, "-- انتخاب مشتری --",
+                                                   new { @class = "form-select" })
+                                @Html.ValidationMessageFor(m => m.J_ID_Customer, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">شماره سفارش</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa fa-hashtag"></i></span>
+                                    @Html.EditorFor(m => m.Number_order, new { htmlAttributes = new { @class = "form-control", placeholder = "مثلاً 100245" } })
+                                </div>
+                                @Html.ValidationMessageFor(m => m.Number_order, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">کد/شناسه فاکتور</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa fa-file-invoice"></i></span>
+                                    @Html.EditorFor(m => m.J_ID_Facktor, new { htmlAttributes = new { @class = "form-control", placeholder = "در صورت وجود" } })
+                                </div>
+                                @Html.ValidationMessageFor(m => m.J_ID_Facktor, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">شماره سفارش در راهکاران</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa fa-barcode"></i></span>
+                                    @Html.EditorFor(m => m.Number_ORder_rahkaran, new { htmlAttributes = new { @class = "form-control", placeholder = "در صورت وجود" } })
+                                </div>
+                                @Html.ValidationMessageFor(m => m.Number_ORder_rahkaran, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">وضعیت</label>
+                                @Html.DropDownListFor(m => m.Status,
+                                                   new SelectList(new[] {
+                                        new { Value = "new",           Text = "جدید" },
+                                        new { Value = "approved",      Text = "تایید شده" },
+                                        new { Value = "in_production", Text = "در حال تولید" },
+                                        new { Value = "shipped",       Text = "ارسال شده" }
+   }, "Value", "Text", Model?.Status),
+                                                   "-- انتخاب وضعیت --", new { @class = "form-select" })
+                                @Html.ValidationMessageFor(m => m.Status, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">تاریخ سفارش</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa fa-calendar-alt"></i></span>
+                                    @Html.TextBoxFor(m => m.Date, new { @class = "form-control persian-date", placeholder = "تاریخ را انتخاب کنید" })
+                                </div>
+                                @Html.ValidationMessageFor(m => m.Date, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        @Html.ActionLink("انصراف", "Index", null, new { @class = "btn btn-outline-secondary" })
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-save ms-1"></i> ذخیره سفارش</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- محصول -->
+            <div class="col-12 col-xxl-6">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-light"><strong>مشخصات کارتن / محصول</strong></div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">کد محصول</label>
+                                <input type="text" class="form-control" name="Product.Code" placeholder="مثلاً C-2025" />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">نوع کارتن</label>
+                                <select class="form-select" name="Product.Type" id="productType">
+                                    <option value="">-- انتخاب کنید --</option>
+                                    <option value="regular">معمولی</option>
+                                    <option value="die_cut">دایکاتی</option>
+                                    <option value="laminated">لمینتی</option>
+                                    <option value="sheet">ورق</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">نام کارتن</label>
+                                <input type="text" class="form-control" name="Product.Name" placeholder="نام طرح/کارتن" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">تیراژ</label>
+                                <input type="number" min="0" class="form-control" name="Product.Tirage" id="tirage" placeholder="مثلاً 5000" />
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label">توضیحات</label>
+                                <textarea class="form-control" rows="2" name="Product.Description" placeholder="توضیحات تکمیلی ..."></textarea>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label d-block mb-1">چند لایه</label>
+                                <div class="btn-group" role="group">
+                                    <input type="radio" class="btn-check" name="Product.Layers" id="layer3" value="3" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="layer3">۳ لایه</label>
+                                    <input type="radio" class="btn-check" name="Product.Layers" id="layer5" value="5" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="layer5">۵ لایه</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label d-block mb-1">چند تیکه</label>
+                                <div class="btn-group" role="group">
+                                    <input type="radio" class="btn-check" name="Product.Pieces" id="piece1" value="1" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="piece1">یک تیکه</label>
+                                    <input type="radio" class="btn-check" name="Product.Pieces" id="pieceHalf" value="half" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="pieceHalf">نیم کارتن</label>
+                                    <input type="radio" class="btn-check" name="Product.Pieces" id="piece4" value="4" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="piece4">چهار تیکه</label>
+                                </div>
+                            </div>
+
+                            <!-- نوع درب -->
+                            <div class="col-md-12">
+                                <label class="form-label">نوع درب</label>
+                                <select id="doorOption" class="form-select">
+                                    <option value="double_meet">دو درب - بسته (بدون همپوشانی)</option>
+                                    <option value="double_overlap">دو درب - بسته (همپوشانی)</option>
+                                    <option value="double_fol">دو درب - بسته (Full Overlap)</option>
+                                    <option value="single_closed">تک درب - بسته</option>
+                                    <option value="single_open">تک درب - باز/نامتوازن (ورود دستی)</option>
+                                    <option value="double_open">دو درب - باز/نامتوازن (ورود دستی)</option>
+                                </select>
+                            </div>
+
+                            <!-- ورودی‌های باز/نامتوازن -->
+                            <div class="col-md-6 d-none" id="boxSingleOpen">
+                                <label class="form-label">مقدار لب درب (cm) - تک درب باز</label>
+                                <input type="number" step="0.1" min="0" class="form-control" id="singleFlapVal" placeholder="مثلاً 20" />
+                            </div>
+                            <div class="col-md-6 d-none" id="boxDoubleOpenTop">
+                                <label class="form-label">لب درب بالا (cm) - دو درب باز</label>
+                                <input type="number" step="0.1" min="0" class="form-control" id="doubleFlapTop" placeholder="مثلاً 18" />
+                            </div>
+                            <div class="col-md-6 d-none" id="boxDoubleOpenBot">
+                                <label class="form-label">لب درب پایین (cm) - دو درب باز</label>
+                                <input type="number" step="0.1" min="0" class="form-control" id="doubleFlapBottom" placeholder="مثلاً 12" />
+                            </div>
+
+                            <!-- ابعاد داخلی -->
+                            <div class="col-12">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label">طول (cm)</label>
+                                        <input type="number" step="0.1" min="0" class="form-control" name="Product.LengthCm" id="lengthCm" placeholder="مثلاً 30.5" required />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">عرض (cm)</label>
+                                        <input type="number" step="0.1" min="0" class="form-control" name="Product.WidthCm" id="widthCm" placeholder="مثلاً 20" required />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">ارتفاع (cm)</label>
+                                        <input type="number" step="0.1" min="0" class="form-control" name="Product.HeightCm" id="heightCm" placeholder="مثلاً 15" required />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- دایکاتی (اختیاری) -->
+                            <div class="col-12 d-none" id="dieCutDims">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">تیغ به تیغ (طول قالب) - cm</label>
+                                        <input type="number" step="0.1" min="0" class="form-control" name="Product.DieToDieLengthCm" id="dieToDieLengthCm" placeholder="مثلاً 85.0" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">عرض قالب - cm</label>
+                                        <input type="number" step="0.1" min="0" class="form-control" name="Product.MoldWidthCm" id="moldWidthCm" placeholder="مثلاً 115.0" />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card-footer small text-muted">
+                        نکته: فیلدهای «Product.*» برای Bind بعدی با API/ViewModel ارسال می‌شوند.
+                    </div>
+                </div>
+            </div>
+
+            <!-- مساحت و شیت + عرض‌های ورق -->
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                        <strong>مساحت و شیت</strong><small class="text-muted">محاسبه‌ی لحظه‌ای</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label class="form-label">عرض لب چسب (cm)</label>
+                                <input type="number" step="0.1" min="0" class="form-control" id="seamAllow" value="2.0">
+                                <div class="form-text">seam / glue flap</div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">تلرانس برش (cm)</label>
+                                <input type="number" step="0.1" min="0" class="form-control" id="trimAllow" value="0.5">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">گپ مرکز (cm)</label>
+                                <input type="number" step="0.1" min="0" class="form-control" id="gapCenter" value="0">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">همپوشانی (cm)</label>
+                                <input type="number" step="0.1" min="0" class="form-control" id="overlap" value="0">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label">طول شیت صنعتی (cm)</label>
+                                <input type="number" step="0.1" min="0" class="form-control" id="sheetLen" value="200">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">عرض شیت صنعتی (cm)</label>
+                                <input type="number" step="0.1" min="0" class="form-control" id="sheetWid" value="200">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">فاصله بین بلنک‌ها (cm)</label>
+                                <input type="number" step="0.1" min="0" class="form-control" id="kerf" value="0.5">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">حاشیه اطراف شیت (cm)</label>
+                                <input type="number" step="0.1" min="0" class="form-control" id="sheetMargin" value="1">
+                            </div>
+
+                            <!-- جدول عرض‌های ورق -->
+                            <div class="col-12 mt-4">
+                                <div class="card shadow-sm">
+                                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                                        <strong>مقایسه‌ی عرض‌های ورق (برحسب عرض بلنک فعلی)</strong>
+                                        <small class="text-muted">لب دستگاه: +۲cm به هر بلنک</small>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-sm table-hover align-middle">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th class="text-center">انتخاب</th>
+                                                        <th class="text-center">عرض ورق (cm)</th>
+                                                        <th class="text-center">عرض مؤثر هر جعبه (Y + 2)</th>
+                                                        <th class="text-center">تعداد جعبه</th>
+                                                        <th class="text-center">ضایعات (cm)</th>
+                                                        <th class="text-center">ضایعات (%)</th>
+                                                        <th class="text-center">عرض صنعتی</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tblSheetWidths"></tbody>
+                                            </table>
+                                        </div>
+                                        <input type="hidden" name="SelectedSheetWidth" id="SelectedSheetWidth" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="p-3 bg-light rounded border">
+                                    <div class="row gy-2">
+                                        <div class="col-md-2"><strong>طول بلنک (X):</strong> <span id="blankX">—</span> cm</div>
+                                        <div class="col-md-2"><strong>عرض بلنک (Y):</strong> <span id="blankY">—</span> cm</div>
+                                        <div class="col-md-3"><strong>مساحت هر عدد:</strong> <span id="areaM2">—</span> m²</div>
+                                        <div class="col-md-2"><strong>روی هر شیت:</strong> <span id="perSheet">—</span> عدد</div>
+                                        <div class="col-md-3"><strong>شیت موردنیاز:</strong> <span id="sheetsNeeded">—</span> شیت</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- گام فلوت + ترکیب کاغذ -->
+            <div id="fluteSection" class="card shadow-sm d-none mt-4" dir="rtl">
+                <div class="card-header bg-light d-flex align-items-center gap-2">
+                    <strong>گام فلوت</strong>
+                    <div class="ms-auto" style="min-width:240px">
+                        <select id="fluteSelect" class="form-select">
+                            <option value="">-- انتخاب گام فلوت --</option>
+                            <option value="C">C</option>
+                            <option value="B">B</option>
+                            <option value="E">E</option>
+                            <option value="CB">CB</option>
+                            <option value="CE">CE</option>
+                            <option value="BE">BE</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered align-middle mb-0">
+                            <thead id="paperComboHead"></thead>
+                            <tbody id="paperComboBody"></tbody>
+                        </table>
+                    </div>
+                    <small class="text-muted d-block mt-2">
+                        ابتدا از جدول «عرض‌های ورق» یک ردیف را انتخاب کنید؛ سپس گام فلوت را برگزینید.
+                    </small>
+                </div>
+            </div>
+            <input type="hidden" id="SelectedFluteType" name="SelectedFluteType" />
+        </div>
+
+        <div class="text-end mt-3 d-xl-none">
+            <button type="submit" class="btn btn-primary"><i class="fa fa-save ms-1"></i> ذخیره سفارش</button>
+        </div>
+    }
+</div>
+
+@section Styles{
+    <style>
+        [dir="rtl"] .form-label {
+            font-weight: 600;
+        }
+
+        .card {
+            border-radius: 12px;
+        }
+
+        .input-group-text {
+            min-width: 42px;
+            justify-content: center;
+        }
+
+        tr.selected-row {
+            background-color: #f0f7ff;
+        }
+
+        #paperComboHead th, #paperComboBody th {
+            white-space: nowrap;
+        }
+
+        .text-danger.fw-semibold, .text-success.fw-semibold {
+            font-weight: 600 !important;
+        }
+    </style>
+}
+
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <!-- اسکریپت محاسبات اصلی و ارسال رویداد calc:updated -->
+    <script>
+        (function () {
+            const $ = s => document.querySelector(s);
+            const nv = el => { const v = parseFloat((el?.value || "").toString().replace(',', '.')); return isNaN(v) ? 0 : v; };
+
+            const selType = $('#productType'); const tir = $('#tirage');
+            const L = $('#lengthCm'), W = $('#widthCm'), H = $('#heightCm');
+            const dieBox = $('#dieCutDims'); const dieL = $('#dieToDieLengthCm'), dieW = $('#moldWidthCm');
+
+            const door = $('#doorOption'), sOpen = $('#singleFlapVal'), dTop = $('#doubleFlapTop'), dBot = $('#doubleFlapBottom');
+            const boxSO = $('#boxSingleOpen'), boxDT = $('#boxDoubleOpenTop'), boxDB = $('#boxDoubleOpenBot');
+
+            const seam = $('#seamAllow'), trim = $('#trimAllow'), gap = $('#gapCenter'), ovl = $('#overlap');
+            const sheetL = $('#sheetLen'), sheetW = $('#sheetWid'), kerf = $('#kerf'), margin = $('#sheetMargin');
+            const outX = $('#blankX'), outY = $('#blankY'), outA = $('#areaM2'), outP = $('#perSheet'), outS = $('#sheetsNeeded');
+
+            const fStd = 1.0;
+
+            function toggleOpen() {
+                const m = door?.value || '';
+                boxSO?.classList.toggle('d-none', m !== 'single_open');
+                const d = m === 'double_open';
+                boxDT?.classList.toggle('d-none', !d);
+                boxDB?.classList.toggle('d-none', !d);
+            }
+            function toggleDie() { dieBox?.classList.toggle('d-none', (selType?.value || '').toLowerCase() !== 'die_cut'); }
+
+            function flaps(L, W, mode) {
+                let Ft = 0, Fb = 0, fmT = 2, fmB = 2, g = nv(gap), o = nv(ovl);
+                switch (mode) {
+                    case 'single_closed': Ft = W + fStd; Fb = 0; break;
+                    case 'double_meet': Ft = (W - g) / 2; Fb = (W - g) / 2; break;
+                    case 'double_overlap': Ft = (W + o) / 2; Fb = (W + o) / 2; break;
+                    case 'double_fol': Ft = W; Fb = W; break;
+                    case 'single_open': Ft = nv(sOpen); Fb = 0; break;
+                    case 'double_open': Ft = nv(dTop); Fb = nv(dBot); break;
+                    default: Ft = (W - g) / 2; Fb = (W - g) / 2; break;
+                }
+                return { Ft, Fb, fmT, fmB };
+            }
+            function pack(FW, FH, BW, BH, k) {
+                if (BW <= 0 || BH <= 0 || FW <= 0 || FH <= 0) return 0;
+                const nx = Math.max(0, Math.floor((FW + k) / (BW + k)));
+                const ny = Math.max(0, Math.floor((FH + k) / (BH + k)));
+                return nx * ny;
+            }
+
+            function compute() {
+                const l = nv(L), w = nv(W), h = nv(H);
+                const die = (selType?.value || '').toLowerCase() === 'die_cut';
+                const mode = door?.value || 'double_meet';
+                const fl = flaps(l, w, mode);
+                const sa = nv(seam), ta = nv(trim);
+
+                let Xcm, Ycm;
+                if (die) {
+                    const dl = nv(dieL), dw = nv(dieW);
+                    if (dl > 0 && dw > 0) { Xcm = dl; Ycm = dw; }
+                    else { Xcm = 2 * (l + w) + sa + ta; Ycm = h + Math.max(fl.Ft, fl.fmT) + Math.max(fl.Fb, fl.fmB) + ta; }
+                } else {
+                    Xcm = 2 * (l + w) + sa + ta;
+                    Ycm = h + Math.max(fl.Ft, fl.fmT) + Math.max(fl.Fb, fl.fmB) + ta;
+                }
+
+                const area = (Xcm * Ycm) / 10000;
+                const Fx = Math.max(0, nv(sheetL) - 2 * nv(margin));
+                const Fy = Math.max(0, nv(sheetW) - 2 * nv(margin));
+                const per = Math.max(pack(Fx, Fy, Xcm, Ycm, nv(kerf)), pack(Fx, Fy, Ycm, Xcm, nv(kerf)));
+                const qty = Math.max(0, Math.floor(nv(tir)));
+                const sheets = per > 0 ? Math.ceil(qty / per) : 0;
+
+                outX.textContent = Xcm.toFixed(1); outY.textContent = Ycm.toFixed(1);
+                outA.textContent = area.toFixed(4); outP.textContent = per.toLocaleString('fa-IR');
+                outS.textContent = sheets.toLocaleString('fa-IR');
+
+                document.dispatchEvent(new CustomEvent('calc:updated', { detail: { Y: Ycm } }));
+            }
+
+            [selType, tir, L, W, H, dieL, dieW, door, sOpen, dTop, dBot, seam, trim, gap, ovl, sheetL, sheetW, kerf, margin]
+                .forEach(el => el && el.addEventListener('input', () => { toggleOpen(); toggleDie(); compute(); }));
+
+            toggleOpen(); toggleDie(); compute();
+        })();
+    </script>
+
+    <!-- اسکریپت جدول عرض‌های ورق (نمایش فلوت داخل همین اسکریپت کنترل می‌شود) -->
+    <script>
+        (function () {
+            const WIDTHS = [80, 90, 100, 110, 120, 125, 140], EDGE = 2.0;
+            const body = document.getElementById('tblSheetWidths'),
+                hid = document.getElementById('SelectedSheetWidth'),
+                fluteSection = document.getElementById('fluteSection');
+
+            const current = () => hid?.value ? parseFloat(hid.value) : null;
+            const setSel = v => { if (hid) hid.value = v ?? ''; };
+            const radio = w => `<div class="form-check d-flex justify-content-center m-0">
+                                    <input class="form-check-input" type="radio" name="sheetWidthChoice" value="${w}">
+                                  </div>`;
+
+            function toggleFluteSection() {
+                const hasWidth = !!(hid && hid.value);
+                fluteSection?.classList.toggle('d-none', !hasWidth);
+            }
+            function hi() {
+                (body?.querySelectorAll('tr') || []).forEach(r => r.classList.remove('selected-row'));
+                const sel = current();
+                if (sel != null) { body.querySelector(`input[type="radio"][value="${sel}"]`)?.closest('tr')?.classList.add('selected-row'); }
+            }
+            function render(y) {
+                if (!body) return; body.innerHTML = '';
+                const eff = Math.max(0, (y || 0) + EDGE), prev = current();
+                WIDTHS.forEach(w => {
+                    const boxes = eff > 0 ? Math.floor(w / eff) : 0;
+                    const used = boxes * eff, waste = Math.max(0, w - used), pct = w > 0 ? (waste / w) * 100 : 0;
+                    const cls = pct > 11 ? 'text-danger fw-semibold' : 'text-success fw-semibold';
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="text-center">${radio(w)}</td>
+                        <td class="text-center">${w.toFixed(0)}</td>
+                        <td class="text-center">${eff.toFixed(1)}</td>
+                        <td class="text-center ${boxes === 0 ? 'text-danger fw-bold' : ''}">${boxes}</td>
+                        <td class="text-center">${waste.toFixed(1)}</td>
+                        <td class="text-center ${cls}">${pct.toFixed(1)}%</td>
+                        <td class="text-center">${w.toFixed(0)} cm</td>`;
+                    tr.querySelector('input[type="radio"]').addEventListener('change', function () {
+                        if (this.checked) { setSel(this.value); hi(); toggleFluteSection(); window.reRenderFluteIfNeeded?.(); }
+                    });
+                    body.appendChild(tr);
+                });
+                if (prev != null) {
+                    const keep = body.querySelector(`input[type="radio"][value="${prev}"]`);
+                    if (keep) { keep.checked = true; setSel(prev); } else setSel('');
+                }
+                hi(); toggleFluteSection();
+            }
+
+            // به محاسبه‌ی اصلی گوش بده
+            document.addEventListener('calc:updated', e => {
+                const y = e?.detail?.Y; if (typeof y === 'number' && !isNaN(y)) render(y);
+            });
+
+            // در اختیار اسکریپت فلوت بگذاریم
+            window.getSelectedIndustrialWidth = () => (hid && hid.value ? parseFloat(hid.value) : null);
+        })();
+    </script>
+
+    <!-- اسکریپت گام فلوت + ترکیب کاغذ (با IIFE کامل) -->
+    <script>
+    (function(){
+        // ===== کاغذها (از سرور) =====
+        const PAPERS = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(papers));
+
+        // ===== المان‌ها =====
+        const fluteSection=document.getElementById('fluteSection');
+        const fluteSelect=document.getElementById('fluteSelect');
+        const headEl=document.getElementById('paperComboHead');
+        const bodyEl=document.getElementById('paperComboBody');
+        const hidFluteType=document.getElementById('SelectedFluteType');
+
+        function setFluteVisibility(){
+            const hasWidth = typeof window.getSelectedIndustrialWidth==='function' && !!window.getSelectedIndustrialWidth();
+            fluteSection?.classList.toggle('d-none', !hasWidth);
+        }
+        function reRenderFluteIfNeeded(){ if(fluteSelect?.value){ renderPaperTable(fluteSelect.value); } }
+        window.reRenderFluteIfNeeded = reRenderFluteIfNeeded; // در اختیار جدول عرض‌ها
+
+        const FLUTE_COLS={
+          'C':['رویه','لایه میانی','فلوت C','زیره'],
+          'B':['رویه','لایه میانی','فلوت B','زیره'],
+          'E':['رویه','لایه میانی','فلوت E','زیره'],
+          'CB':['رویه','فلوت B/E','لایه میانی','فلوت C','زیره'],
+          'CE':['رویه','فلوت B/E','لایه میانی','فلوت C','زیره'],
+          'BE':['رویه','فلوت B/E','لایه میانی','فلوت C','زیره']
+        };
+        function colKeys(t){
+          switch(t){
+            case 'C': return ['top','mid','flute_c','bottom'];
+            case 'B': return ['top','mid','flute_b','bottom'];
+            case 'E': return ['top','mid','flute_e','bottom'];
+            case 'CB': case 'CE': case 'BE': return ['top','flute_be','mid','flute_c','bottom'];
+            default: return [];
+          }
+        }
+        const esc=s=>(s??'').toString().replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+
+        // فیلتر کاغذها براساس عرض صنعتی انتخاب‌شده (Cat=1)
+        function filterPapersByIndustrialWidth(){
+            const selW = (typeof window.getSelectedIndustrialWidth==='function') ? window.getSelectedIndustrialWidth() : null;
+            if(!selW) return PAPERS;
+            return PAPERS.filter(p=>{
+                const widths=(p.widths||[]).map(Number).filter(v=>!isNaN(v));
+                return widths.some(v=>v>=selW);
+            });
+        }
+
+        // رندر جدول با ۳ ستون برای هر لایه (کاغذ/گرماژ/مبلغ)
+        function renderPaperTable(t){
+          headEl.innerHTML=''; bodyEl.innerHTML='';
+          if(!t || !FLUTE_COLS[t]) return;
+
+          const cols=FLUTE_COLS[t], keys=colKeys(t);
+          // Header دوبل
+          let h1=`<tr><th class="text-center" rowspan="2" style="min-width:160px">ردیف</th>`;
+          cols.forEach(c=>{ h1+=`<th class="text-center" colspan="3">${c}</th>`; }); h1+='</tr>';
+          let h2='<tr>'; cols.forEach(()=>{ h2+='<th class="text-center">کاغذ</th><th class="text-center">گرماژ</th><th class="text-center">مبلغ</th>';}); h2+='</tr>';
+          headEl.innerHTML=h1+h2;
+
+          function buildThreeTDs(namePrefix){
+              const filtered=filterPapersByIndustrialWidth();
+              const paperOpts = filtered.map(p=>`<option value="${p.id}" data-price="${+p.price||0}">${esc(p.name)}</option>`).join('');
+              return `
+                <td>
+                  <select class="form-select form-select-sm paper-select" name="${namePrefix}.PaperId">
+                    <option value="">-- انتخاب کاغذ --</option>${paperOpts}
+                  </select>
+                </td>
+                <td>
+                  <select class="form-select form-select-sm gram-select" name="${namePrefix}.Grammage" disabled>
+                    <option value="">-- گرماژ --</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="number" step="0.01" min="0" class="form-control form-control-sm price-input" name="${namePrefix}.Price" placeholder="مبلغ" />
+                </td>`;
+          }
+
+          // سطر: ترکیب اصلی
+          let main=`<tr><th class="text-center">ترکیب اصلی</th>`;
+          keys.forEach(k=>{ main+=buildThreeTDs(`PaperCombo.Main.${k}`); });
+          main+='</tr>';
+
+          // سطر: جایگزین
+          let alt=`<tr><th class="text-center">درصورت استفاده از کاغذهای جایگزین مشخص فرمایید</th>`;
+          keys.forEach(k=>{ alt+=buildThreeTDs(`PaperCombo.Alternative.${k}`); });
+          alt+='</tr>';
+
+          bodyEl.innerHTML=main+alt;
+
+          // ایونت‌ها
+          wirePaperEvents(bodyEl);
+        }
+
+        function wirePaperEvents(scope){
+            scope.querySelectorAll('.paper-select').forEach(sel=>{
+                sel.addEventListener('change',function(){
+                    const cell=this.closest('td');
+                    const gram = cell.nextElementSibling?.querySelector('.gram-select');
+                    const price = cell.nextElementSibling?.nextElementSibling?.querySelector('.price-input');
+                    const pid=parseInt(this.value,10);
+                    const p = PAPERS.find(x=>x.id===pid);
+
+                    if(price){
+                        const defaultPrice = parseFloat(this.selectedOptions[0]?.dataset?.price||'0');
+                        price.value = isNaN(defaultPrice)? '' : defaultPrice;
+                    }
+
+                    if(gram){
+                        gram.innerHTML = `<option value="">-- گرماژ --</option>`;
+                        if(p && Array.isArray(p.grammages)){
+                            const grams = p.grammages.map(Number).filter(v=>!isNaN(v)).sort((a,b)=>a-b);
+                            grams.forEach(g=>{
+                                const opt=document.createElement('option'); opt.value=g; opt.textContent=g;
+                                gram.appendChild(opt);
+                            });
+                            gram.disabled=false;
+                        }else{
+                            gram.disabled=true;
+                        }
+                    }
+                });
+            });
+        }
+
+        // hookup
+        setFluteVisibility();
+        fluteSelect?.addEventListener('change',function(){
+            hidFluteType.value=this.value||'';
+            renderPaperTable(this.value);
+        });
+    })();
+    </script>
+
+    <!-- (اختیاری) دمو فراخوانی API شما؛ خطا نمی‌دهد اگر Endpoint موجود نباشد -->
+    <script>
+    (async function(){
+      try{
+        const all = await fetch('@Url.Action("GetAll","Papers")').then(r=>r.ok?r.json():null);
+        if(all?.ok){ console.log('papers', all.data); }
+      }catch(e){}
+      try{
+        const minW = 110;
+        const filtered = await fetch('@Url.Action("GetFiltered","Papers")?minIndustrialWidth='+minW).then(r=>r.ok?r.json():null);
+        if(filtered){ console.log('filtered', filtered); }
+      }catch(e){}
+    })();
+    </script>
+}
