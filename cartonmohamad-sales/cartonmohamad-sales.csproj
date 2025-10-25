@@ -209,6 +209,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OverheadCostsController.cs" />
     <Compile Include="Controllers\PaperComboesController.cs" />
+    <Compile Include="Controllers\PapersController.cs" />
     <Compile Include="Controllers\ProductImagesController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\Tb_Body_OrderController.cs" />
@@ -216,6 +217,7 @@
     <Compile Include="Controllers\Tb_join_Categori_PaperController.cs" />
     <Compile Include="Controllers\Tb_OrderController.cs" />
     <Compile Include="Controllers\Tb_PaperController.cs" />
+    <Compile Include="Dtos\PaperDtos.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -466,6 +468,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Papers\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
