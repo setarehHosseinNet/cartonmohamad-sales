@@ -1,0 +1,78 @@
+﻿@using cartonmohamad_sales.ViewModels
+@model InquiriesVM
+
+@{
+    ViewBag.Title = "سفارش‌های ارسال‌شده برای استعلام";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container py-4" dir="rtl">
+    <div class="d-flex align-items-center mb-3">
+        <h3 class="m-0">سفارش‌های «ارسال برای استعلام»</h3>
+        <div class="ms-auto">
+            @Html.ActionLink("بازگشت", "Index", "Tb_Order", null, new { @class = "btn btn-outline-secondary" })
+        </div>
+    </div>
+
+    <form class="row g-2 mb-3">
+        <div class="col-md-3">
+            <input name="q" value="@Model.Q" class="form-control" placeholder="جستجو: مشتری/شماره سفارش">
+        </div>
+        <div class="col-md-2">
+            <input name="from" value="@Model.From" class="form-control" placeholder="از تاریخ (yyyy-mm-dd)">
+        </div>
+        <div class="col-md-2">
+            <input name="to" value="@Model.To" class="form-control" placeholder="تا تاریخ (yyyy-mm-dd)">
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary w-100">جستجو</button>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th class="text-center" style="width:110px">#</th>
+                    <th>مشتری</th>
+                    <th>شماره سفارش</th>
+                    <th>تاریخ</th>
+                    <th>وضعیت</th>
+                    <th class="text-center" style="width:120px">عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model.Items)
+                {
+                    <tr>
+                        <td class="text-center">@r.OrderId</td>
+                        <td>@r.CustomerName</td>
+                        <td>@(r.NumberOrderText ?? "-")</td>
+                        <td>@r.Date.ToString("yyyy/MM/dd HH:mm")</td>
+                        <td><span class="badge bg-warning text-dark">ارسال برای استعلام</span></td>
+                        <td class="text-center">
+                            @Html.ActionLink("مشاهده", "Details", "Tb_Order", new { id = r.OrderId }, new { @class = "btn btn-sm btn-outline-primary" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @{
+        var pages = (int)Math.Ceiling(1.0 * Model.Total / Model.PageSize);
+        if (pages < 1) { pages = 1; }
+    }
+    <nav>
+        <ul class="pagination justify-content-center">
+            <li class="page-item @(Model.Page<=1?"disabled":"")">
+                <a class="page-link" href="@Url.Action("Inquiries", new { page = Model.Page-1, q=Model.Q, from=Model.From, to=Model.To })">قبلی</a>
+            </li>
+            <li class="page-item disabled">
+                <span class="page-link">@Model.Page / @pages</span>
+            </li>
+            <li class="page-item @(Model.Page>=pages?"disabled":"")">
+                <a class="page-link" href="@Url.Action("Inquiries", new { page = Model.Page+1, q=Model.Q, from=Model.From, to=Model.To })">بعدی</a>
+            </li>
+        </ul>
+    </nav>
+</div>

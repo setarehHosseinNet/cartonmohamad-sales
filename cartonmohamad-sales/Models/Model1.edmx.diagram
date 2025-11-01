@@ -10,7 +10,7 @@
         <EntityTypeShape EntityType="CartonMohamad_PriceModel.FinalCharge" Width="1.5" PointX="8" PointY="19.75" />
         <EntityTypeShape EntityType="CartonMohamad_PriceModel.Info_Compuni" Width="1.5" PointX="8" PointY="12.625" />
         <EntityTypeShape EntityType="CartonMohamad_PriceModel.OverheadCost" Width="1.5" PointX="8" PointY="23.5" />
-        <EntityTypeShape EntityType="CartonMohamad_PriceModel.PaperCombo" Width="1.5" PointX="3" PointY="3.25" />
+        <EntityTypeShape EntityType="CartonMohamad_PriceModel.PaperCombo" Width="1.5" PointX="3.875" PointY="3.125" />
         <EntityTypeShape EntityType="CartonMohamad_PriceModel.ProductImage" Width="1.5" PointX="3" PointY="10.625" />
         <EntityTypeShape EntityType="CartonMohamad_PriceModel.Product" Width="1.5" PointX="0.75" PointY="9.125" />
         <EntityTypeShape EntityType="CartonMohamad_PriceModel.sysdiagram" Width="1.5" PointX="10.5" PointY="3.625" />

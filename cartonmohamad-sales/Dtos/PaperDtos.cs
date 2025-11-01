@@ -29,4 +29,9 @@ namespace cartonmohamad_sales.Dtos
         public T data { get; set; }
         public string message { get; set; }
     }
+    public class PaperLookupDto
+    {
+        public int Id { get; set; }
+        public string Text { get; set; } // مناسب برای select2
+    }
 }

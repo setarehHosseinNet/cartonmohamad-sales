@@ -1,13 +1,11 @@
-﻿@model cartonmohamad_sales.Models.Tb_Order
+﻿```cshtml
+@model cartonmohamad_sales.Models.Tb_Order
 @using System.Linq
 @{
     ViewBag.Title = "ثبت سفارش / فاکتور";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     var cust = ViewBag.Customer as cartonmohamad_sales.Models.Customer;
-
-    // ViewBag.Papers باید در کنترلر پر شده باشد (id,name,price,widths(cat=1),grammages(cat=2))
-    var papers = (IEnumerable<dynamic>)ViewBag.Papers ?? Enumerable.Empty<object>();
 }
 
 <div class="container py-4" dir="rtl">
@@ -51,8 +49,8 @@
                             <div class="col-md-12">
                                 <label class="form-label">مشتری</label>
                                 @Html.DropDownListFor(m => m.J_ID_Customer,
-                                                   (SelectList)ViewBag.J_ID_Customer, "-- انتخاب مشتری --",
-                                                   new { @class = "form-select" })
+                                                        (SelectList)ViewBag.J_ID_Customer, "-- انتخاب مشتری --",
+                                                        new { @class = "form-select" })
                                 @Html.ValidationMessageFor(m => m.J_ID_Customer, "", new { @class = "text-danger" })
                             </div>
 
@@ -86,13 +84,13 @@
                             <div class="col-md-6">
                                 <label class="form-label">وضعیت</label>
                                 @Html.DropDownListFor(m => m.Status,
-                                                   new SelectList(new[] {
+                                                        new SelectList(new[] {
                                         new { Value = "new",           Text = "جدید" },
                                         new { Value = "approved",      Text = "تایید شده" },
                                         new { Value = "in_production", Text = "در حال تولید" },
                                         new { Value = "shipped",       Text = "ارسال شده" }
-   }, "Value", "Text", Model?.Status),
-                                                   "-- انتخاب وضعیت --", new { @class = "form-select" })
+}, "Value", "Text", Model?.Status),
+                                                        "-- انتخاب وضعیت --", new { @class = "form-select" })
                                 @Html.ValidationMessageFor(m => m.Status, "", new { @class = "text-danger" })
                             </div>
 
@@ -216,18 +214,22 @@
                                 </div>
                             </div>
 
-                            <!-- دایکاتی (اختیاری) -->
-                            <div class="col-12 d-none" id="dieCutDims">
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label">تیغ به تیغ (طول قالب) - cm</label>
-                                        <input type="number" step="0.1" min="0" class="form-control" name="Product.DieToDieLengthCm" id="dieToDieLengthCm" placeholder="مثلاً 85.0" />
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">عرض قالب - cm</label>
-                                        <input type="number" step="0.1" min="0" class="form-control" name="Product.MoldWidthCm" id="moldWidthCm" placeholder="مثلاً 115.0" />
+                            <!-- همه چیز بعد از «ارتفاع»: در این wrapper تا انتهای کارت -->
+                            <div id="productExtrasAfterHeight">
+                                <!-- دایکاتی (اختیاری) -->
+                                <div class="col-12 d-none" id="dieCutDims">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">تیغ به تیغ (طول قالب) - cm</label>
+                                            <input type="number" step="0.1" min="0" class="form-control" name="Product.DieToDieLengthCm" id="dieToDieLengthCm" placeholder="مثلاً 85.0" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">عرض قالب - cm</label>
+                                            <input type="number" step="0.1" min="0" class="form-control" name="Product.MoldWidthCm" id="moldWidthCm" placeholder="مثلاً 115.0" />
+                                        </div>
                                     </div>
                                 </div>
+                                <!-- اگر آیتم‌های دیگری بعد از ارتفاع دارید، همین‌جا اضافه شوند -->
                             </div>
 
                         </div>
@@ -244,84 +246,100 @@
                     <div class="card-header bg-light d-flex justify-content-between align-items-center">
                         <strong>مساحت و شیت</strong><small class="text-muted">محاسبه‌ی لحظه‌ای</small>
                     </div>
-                    <div class="card-body">
-                        <div class="row g-3">
-                            <div class="col-md-3">
-                                <label class="form-label">عرض لب چسب (cm)</label>
-                                <input type="number" step="0.1" min="0" class="form-control" id="seamAllow" value="2.0">
-                                <div class="form-text">seam / glue flap</div>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label">تلرانس برش (cm)</label>
-                                <input type="number" step="0.1" min="0" class="form-control" id="trimAllow" value="0.5">
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label">گپ مرکز (cm)</label>
-                                <input type="number" step="0.1" min="0" class="form-control" id="gapCenter" value="0">
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label">همپوشانی (cm)</label>
-                                <input type="number" step="0.1" min="0" class="form-control" id="overlap" value="0">
-                            </div>
 
-                            <div class="col-md-3">
-                                <label class="form-label">طول شیت صنعتی (cm)</label>
-                                <input type="number" step="0.1" min="0" class="form-control" id="sheetLen" value="200">
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label">عرض شیت صنعتی (cm)</label>
-                                <input type="number" step="0.1" min="0" class="form-control" id="sheetWid" value="200">
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label">فاصله بین بلنک‌ها (cm)</label>
-                                <input type="number" step="0.1" min="0" class="form-control" id="kerf" value="0.5">
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label">حاشیه اطراف شیت (cm)</label>
-                                <input type="number" step="0.1" min="0" class="form-control" id="sheetMargin" value="1">
-                            </div>
+                    <!-- حالت کامل (قدیمی) -->
+                    <div id="calcFullMode">
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <label class="form-label">عرض لب چسب (cm)</label>
+                                    <input type="number" step="0.1" min="0" class="form-control" id="seamAllow" value="2.0">
+                                    <div class="form-text">seam / glue flap</div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">تلرانس برش (cm)</label>
+                                    <input type="number" step="0.1" min="0" class="form-control" id="trimAllow" value="0.5">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">گپ مرکز (cm)</label>
+                                    <input type="number" step="0.1" min="0" class="form-control" id="gapCenter" value="0">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">همپوشانی (cm)</label>
+                                    <input type="number" step="0.1" min="0" class="form-control" id="overlap" value="0">
+                                </div>
 
-                            <!-- جدول عرض‌های ورق -->
-                            <div class="col-12 mt-4">
-                                <div class="card shadow-sm">
-                                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
-                                        <strong>مقایسه‌ی عرض‌های ورق (برحسب عرض بلنک فعلی)</strong>
-                                        <small class="text-muted">لب دستگاه: +۲cm به هر بلنک</small>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="table table-sm table-hover align-middle">
-                                                <thead class="table-light">
-                                                    <tr>
-                                                        <th class="text-center">انتخاب</th>
-                                                        <th class="text-center">عرض ورق (cm)</th>
-                                                        <th class="text-center">عرض مؤثر هر جعبه (Y + 2)</th>
-                                                        <th class="text-center">تعداد جعبه</th>
-                                                        <th class="text-center">ضایعات (cm)</th>
-                                                        <th class="text-center">ضایعات (%)</th>
-                                                        <th class="text-center">عرض صنعتی</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="tblSheetWidths"></tbody>
-                                            </table>
+                                <div class="col-md-3">
+                                    <label class="form-label">طول شیت صنعتی (cm)</label>
+                                    <input type="number" step="0.1" min="0" class="form-control" id="sheetLen" value="200">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">عرض شیت صنعتی (cm)</label>
+                                    <input type="number" step="0.1" min="0" class="form-control" id="sheetWid" value="200">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">فاصله بین بلنک‌ها (cm)</label>
+                                    <input type="number" step="0.1" min="0" class="form-control" id="kerf" value="0.5">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">حاشیه اطراف شیت (cm)</label>
+                                    <input type="number" step="0.1" min="0" class="form-control" id="sheetMargin" value="1">
+                                </div>
+
+                                <!-- جدول عرض‌های ورق -->
+                                <div class="col-12 mt-4">
+                                    <div class="card shadow-sm">
+                                        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                                            <strong>مقایسه‌ی عرض‌های ورق (برحسب عرض بلنک فعلی)</strong>
+                                            <small class="text-muted">لب دستگاه: +۲cm به هر بلنک</small>
                                         </div>
-                                        <input type="hidden" name="SelectedSheetWidth" id="SelectedSheetWidth" />
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-sm table-hover align-middle">
+                                                    <thead class="table-light">
+                                                        <tr>
+                                                            <th class="text-center">انتخاب</th>
+                                                            <th class="text-center">عرض ورق (cm)</th>
+                                                            <th class="text-center">عرض مؤثر هر جعبه (Y + 2)</th>
+                                                            <th class="text-center">تعداد جعبه</th>
+                                                            <th class="text-center">ضایعات (cm)</th>
+                                                            <th class="text-center">ضایعات (%)</th>
+                                                            <th class="text-center">عرض صنعتی</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tblSheetWidths"></tbody>
+                                                </table>
+                                            </div>
+                                            <input type="hidden" name="SelectedSheetWidth" id="SelectedSheetWidth" />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="col-12">
-                                <div class="p-3 bg-light rounded border">
-                                    <div class="row gy-2">
-                                        <div class="col-md-2"><strong>طول بلنک (X):</strong> <span id="blankX">—</span> cm</div>
-                                        <div class="col-md-2"><strong>عرض بلنک (Y):</strong> <span id="blankY">—</span> cm</div>
-                                        <div class="col-md-3"><strong>مساحت هر عدد:</strong> <span id="areaM2">—</span> m²</div>
-                                        <div class="col-md-2"><strong>روی هر شیت:</strong> <span id="perSheet">—</span> عدد</div>
-                                        <div class="col-md-3"><strong>شیت موردنیاز:</strong> <span id="sheetsNeeded">—</span> شیت</div>
+                                <div class="col-12">
+                                    <div class="p-3 bg-light rounded border">
+                                        <div class="row gy-2">
+                                            <div class="col-md-2"><strong>طول بلنک (X):</strong> <span id="blankX">—</span> cm</div>
+                                            <div class="col-md-2"><strong>عرض بلنک (Y):</strong> <span id="blankY">—</span> cm</div>
+                                            <div class="col-md-3"><strong>مساحت هر عدد:</strong> <span id="areaM2">—</span> m²</div>
+                                            <div class="col-md-2"><strong>روی هر شیت:</strong> <span id="perSheet">—</span> عدد</div>
+                                            <div class="col-md-3"><strong>شیت موردنیاز:</strong> <span id="sheetsNeeded">—</span> شیت</div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- حالت استعلام (فقط دکمه) -->
+                    <div id="inquiryOnlyMode" class="d-none">
+                        <div class="card-body">
+                            <button type="button" class="btn btn-warning w-100" id="btnInquiry">
+                                <i class="fa fa-paper-plane ms-1"></i> ارسال برای استعلام
+                            </button>
+                            <small class="text-muted d-block mt-2 text-center">
+                                برای این نوع کارتن، محاسبات نمایش داده نمی‌شود؛ درخواست استعلام ارسال کنید.
+                            </small>
                         </div>
                     </div>
                 </div>
@@ -396,15 +414,57 @@
 @section Scripts{
     @Scripts.Render("~/bundles/jqueryval")
 
-    <!-- اسکریپت محاسبات اصلی و ارسال رویداد calc:updated -->
+    <!-- سوییچ حالت «معمولی/استعلام» بر اساس نوع کارتن -->
+    <script>
+        (function () {
+            const selType = document.getElementById('productType');
+            const extras = document.getElementById('productExtrasAfterHeight');
+            const dieBox = document.getElementById('dieCutDims');
+            const flute = document.getElementById('fluteSection');
+
+            const calcFull = document.getElementById('calcFullMode');
+            const inquiry = document.getElementById('inquiryOnlyMode');
+
+            function isRegular() { return (selType?.value || '').toLowerCase() === 'regular'; }
+
+            function applyProductTypeMode() {
+                const regular = isRegular();
+
+                // کارت «محصول»: هرچه بعد از ارتفاع است
+                extras?.classList.toggle('d-none', !regular);
+                if (!regular) { dieBox?.classList.add('d-none'); flute?.classList.add('d-none'); }
+
+                // کارت «مساحت و شیت»
+                calcFull?.classList.toggle('d-none', !regular);
+                inquiry?.classList.toggle('d-none', regular);
+
+                // اطلاع‌رسانی به بقیه اسکریپت‌ها
+                document.dispatchEvent(new CustomEvent('productType:modeChanged', { detail: { regular } }));
+
+                // تریگر محاسبه برای پاکسازی/بازنمایش
+                document.dispatchEvent(new CustomEvent('calc:updated', { detail: { Y: regular ? 0 : NaN } }));
+            }
+
+            selType?.addEventListener('change', applyProductTypeMode);
+            document.addEventListener('DOMContentLoaded', applyProductTypeMode);
+            applyProductTypeMode();
+
+            // دکمه استعلام (Placeholder)
+            document.getElementById('btnInquiry')?.addEventListener('click', function () {
+                alert('درخواست استعلام ثبت شد.');
+            });
+        })();
+    </script>
+
+    <!-- محاسبات بلنک + رویداد calc:updated -->
     <script>
         (function () {
             const $ = s => document.querySelector(s);
             const nv = el => { const v = parseFloat((el?.value || "").toString().replace(',', '.')); return isNaN(v) ? 0 : v; };
 
-            const selType = $('#productType'); const tir = $('#tirage');
+            const selType = $('#productType'), tir = $('#tirage');
             const L = $('#lengthCm'), W = $('#widthCm'), H = $('#heightCm');
-            const dieBox = $('#dieCutDims'); const dieL = $('#dieToDieLengthCm'), dieW = $('#moldWidthCm');
+            const dieBox = $('#dieCutDims'), dieL = $('#dieToDieLengthCm'), dieW = $('#moldWidthCm');
 
             const door = $('#doorOption'), sOpen = $('#singleFlapVal'), dTop = $('#doubleFlapTop'), dBot = $('#doubleFlapBottom');
             const boxSO = $('#boxSingleOpen'), boxDT = $('#boxDoubleOpenTop'), boxDB = $('#boxDoubleOpenBot');
@@ -445,6 +505,18 @@
             }
 
             function compute() {
+                // اگر نوع غیر از «معمولی» باشد، محاسبات نمایش داده نشوند
+                const notRegular = ((selType?.value || '').toLowerCase() !== 'regular');
+                if (notRegular) {
+                    if (outX) outX.textContent = '—';
+                    if (outY) outY.textContent = '—';
+                    if (outA) outA.textContent = '—';
+                    if (outP) outP.textContent = '—';
+                    if (outS) outS.textContent = '—';
+                    document.dispatchEvent(new CustomEvent('calc:updated', { detail: { Y: NaN } }));
+                    return;
+                }
+
                 const l = nv(L), w = nv(W), h = nv(H);
                 const die = (selType?.value || '').toLowerCase() === 'die_cut';
                 const mode = door?.value || 'double_meet';
@@ -479,10 +551,13 @@
                 .forEach(el => el && el.addEventListener('input', () => { toggleOpen(); toggleDie(); compute(); }));
 
             toggleOpen(); toggleDie(); compute();
+
+            // اگر حالت کارتن تغییر کند، دوباره محاسبه کن
+            document.addEventListener('productType:modeChanged', () => compute());
         })();
     </script>
 
-    <!-- اسکریپت جدول عرض‌های ورق (نمایش فلوت داخل همین اسکریپت کنترل می‌شود) -->
+    <!-- جدول عرض‌های ورق -->
     <script>
         (function () {
             const WIDTHS = [80, 90, 100, 110, 120, 125, 140], EDGE = 2.0;
@@ -493,12 +568,15 @@
             const current = () => hid?.value ? parseFloat(hid.value) : null;
             const setSel = v => { if (hid) hid.value = v ?? ''; };
             const radio = w => `<div class="form-check d-flex justify-content-center m-0">
-                                    <input class="form-check-input" type="radio" name="sheetWidthChoice" value="${w}">
-                                  </div>`;
+                      <input class="form-check-input" type="radio" name="sheetWidthChoice" value="${w}">
+                    </div>`;
+
+            const selType = document.getElementById('productType');
+            const isRegular = () => (selType?.value || '').toLowerCase() === 'regular';
 
             function toggleFluteSection() {
                 const hasWidth = !!(hid && hid.value);
-                fluteSection?.classList.toggle('d-none', !hasWidth);
+                fluteSection?.classList.toggle('d-none', !hasWidth || !isRegular());
             }
             function hi() {
                 (body?.querySelectorAll('tr') || []).forEach(r => r.classList.remove('selected-row'));
@@ -533,164 +611,314 @@
                 hi(); toggleFluteSection();
             }
 
-            // به محاسبه‌ی اصلی گوش بده
             document.addEventListener('calc:updated', e => {
-                const y = e?.detail?.Y; if (typeof y === 'number' && !isNaN(y)) render(y);
+                const y = e?.detail?.Y;
+                if (typeof y !== 'number' || isNaN(y)) {
+                    if (body) body.innerHTML = '';
+                    setSel('');
+                    toggleFluteSection();
+                    return;
+                }
+                render(y);
             });
 
-            // در اختیار اسکریپت فلوت بگذاریم
             window.getSelectedIndustrialWidth = () => (hid && hid.value ? parseFloat(hid.value) : null);
         })();
     </script>
 
-    <!-- اسکریپت گام فلوت + ترکیب کاغذ (با IIFE کامل) -->
+    <!-- گام فلوت + ترکیب کاغذ (API-Driven) -->
     <script>
-    (function(){
-        // ===== کاغذها (از سرور) =====
-        const PAPERS = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(papers));
+/*
+  نسخه ساده‌شده: فقط انتخاب «کاغذ» برای هر لایه
+  و در انتهای جدول دو ستون «جمع گرماژ» و «جمع مبلغ».
 
-        // ===== المان‌ها =====
-        const fluteSection=document.getElementById('fluteSection');
-        const fluteSelect=document.getElementById('fluteSelect');
-        const headEl=document.getElementById('paperComboHead');
-        const bodyEl=document.getElementById('paperComboBody');
-        const hidFluteType=document.getElementById('SelectedFluteType');
+  اگر API در مسیر دیگری است، این را عوض کن:
+  const API_PAPERS = '@Url.Content("~/api/paper")';
+*/
+(function(){
+  const API_PAPERS = '@Url.Content("~/api/paper")';
 
-        function setFluteVisibility(){
-            const hasWidth = typeof window.getSelectedIndustrialWidth==='function' && !!window.getSelectedIndustrialWidth();
-            fluteSection?.classList.toggle('d-none', !hasWidth);
+  // ===== کش API =====
+  let PAPERS = null, LOADING = null;
+
+  // کمکی‌ها
+  const esc = s => (s??'').toString().replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const toFa = n => (isFinite(n) ? Number(n).toLocaleString('fa-IR') : '۰');
+
+  function csvToNums(s){
+    if(!s) return [];
+    if(Array.isArray(s)) return s.map(Number).filter(v=>!isNaN(v));
+    return s.toString().split(/[,\s;|]+/).map(Number).filter(v=>!isNaN(v));
+  }
+  function parseWidth(name){
+    const m = /عرض\s*([0-9]+)/i.exec(name);
+    return m ? +m[1] : null;
+  }
+  function parseGram(name){
+    const m = /گرماژ\s*([0-9]+)/i.exec(name) || /([0-9]+)\s*گرم/i.exec(name);
+    return m ? +m[1] : null;
+  }
+
+  async function loadPapers(){
+    if (PAPERS) return PAPERS;
+    if (LOADING) return await LOADING;
+
+    LOADING = (async () => {
+      const res = await fetch(API_PAPERS, { headers:{ 'Accept':'application/json' }});
+      if(!res.ok) throw new Error('Paper API ' + res.status);
+      let data = await res.json();
+      if (data && typeof data === 'object' && !Array.isArray(data) && ('data' in data)) data = data.data;
+
+      const norm = (p) => {
+        const id = Number(p.id ?? p.ID ?? p.paper_id ?? p.PaperId);
+        const name = (p.name ?? p.Paper_Name ?? p.title ?? '').toString();
+        const price = Number(p.price ?? p.price_per_sheet ?? p.Price ?? 0);
+
+        const widths = csvToNums(p.widths ?? p.cat1 ?? p.widths_cat1 ?? p.widthsCsv);
+        const grammages = csvToNums(p.grammages ?? p.cat2 ?? p.grammagesCsv);
+
+        const wN = parseWidth(name), gN = parseGram(name);
+        if (wN != null && !widths.length) widths.push(wN);
+        if (gN != null && !grammages.length) grammages.push(gN);
+
+        return { id, name, price, widths, grammages };
+      };
+
+      PAPERS = Array.isArray(data) ? data.map(norm).filter(x => !isNaN(x.id)) : [];
+      return PAPERS;
+    })();
+
+    try { return await LOADING; }
+    finally { LOADING = null; }
+  }
+
+  // ===== وضعیت انتخاب عرض صنعتی =====
+  function hasIndustrialWidth(){
+    return typeof window.getSelectedIndustrialWidth==='function' && !!window.getSelectedIndustrialWidth();
+  }
+  async function filterByIndustrialWidth(){
+    const all = await loadPapers();
+    const selW = (typeof window.getSelectedIndustrialWidth==='function') ? window.getSelectedIndustrialWidth() : null;
+    if(!selW) return all;
+    const filtered = all.filter(p => (p.widths||[]).some(v => v >= selW));
+    return filtered.length ? filtered : all;
+  }
+
+  // ===== عناصر DOM =====
+  const fluteSection   = document.getElementById('fluteSection');
+  const fluteSelect    = document.getElementById('fluteSelect');
+  const headEl         = document.getElementById('paperComboHead');
+  const bodyEl         = document.getElementById('paperComboBody');
+  const hidFluteType   = document.getElementById('SelectedFluteType');
+  const selType        = document.getElementById('productType');
+  const isRegular      = () => (selType?.value || '').toLowerCase() === 'regular';
+
+  function setFluteVisibility(){
+    fluteSection?.classList.toggle('d-none', !hasIndustrialWidth() || !isRegular());
+  }
+
+  // ===== تعریف ستون‌های فلوت =====
+  const FLUTE_COLS={
+    'C':['رویه','لایه میانی','فلوت C','زیره'],
+    'B':['رویه','لایه میانی','فلوت B','زیره'],
+    'E':['رویه','لایه میانی','فلوت E','زیره'],
+    'CB':['رویه','فلوت B/E','لایه میانی','فلوت C','زیره'],
+    'CE':['رویه','فلوت B/E','لایه میانی','فلوت C','زیره'],
+    'BE':['رویه','فلوت B/E','لایه میانی','فلوت C','زیره']
+  };
+  function colKeys(t){
+    switch(t){
+      case 'C': return ['top','mid','flute_c','bottom'];
+      case 'B': return ['top','mid','flute_b','bottom'];
+      case 'E': return ['top','mid','flute_e','bottom'];
+      case 'CB': case 'CE': case 'BE': return ['top','flute_be','mid','flute_c','bottom'];
+      default: return [];
+    }
+  }
+
+  // ===== رندر جدول با ستون مجموع‌ها =====
+  async function renderPaperTable(t){
+    headEl.innerHTML=''; bodyEl.innerHTML='';
+    if(!t || !FLUTE_COLS[t] || !isRegular()) return;
+
+    const cols=FLUTE_COLS[t], keys=colKeys(t);
+
+    // Header
+    let h1 = `<tr><th class="text-center" rowspan="1" style="min-width:160px">ردیف</th>`;
+    cols.forEach(c => { h1 += `<th class="text-center">${c} (کاغذ)</th>`; });
+    h1 += `<th class="text-center">جمع گرماژ</th><th class="text-center">جمع مبلغ</th></tr>`;
+    headEl.innerHTML = h1;
+
+    const list = await filterByIndustrialWidth();
+    const paperOpts = list.map(p =>
+      `<option value="${p.id}" data-price="${+p.price||0}" data-grams="${(p.grammages||[]).join(',')}">${esc(p.name)}</option>`
+    ).join('');
+
+    function buildCells(namePrefix){
+      return keys.map(k => `
+        <td>
+          <select class="form-select form-select-sm paper-select" name="${namePrefix}.${k}">
+            <option value="">-- انتخاب کاغذ --</option>${paperOpts}
+          </select>
+        </td>
+      `).join('');
+    }
+
+    // سطرها: main و alternative
+    bodyEl.innerHTML = `
+      <tr data-row="main">
+        <th class="text-center">ترکیب اصلی</th>
+        ${buildCells('PaperCombo.Main')}
+        <td class="text-center">
+          <span class="sum-gram" data-row="main">۰</span>
+          <input type="hidden" name="PaperCombo.Main.TotalGrammage" value="0" />
+        </td>
+        <td class="text-center">
+          <span class="sum-price" data-row="main">۰</span>
+          <input type="hidden" name="PaperCombo.Main.TotalPrice" value="0" />
+        </td>
+      </tr>
+      <tr data-row="alt">
+        <th class="text-center">درصورت استفاده از کاغذهای جایگزین مشخص فرمایید</th>
+        ${buildCells('PaperCombo.Alternative')}
+        <td class="text-center">
+          <span class="sum-gram" data-row="alt">۰</span>
+          <input type="hidden" name="PaperCombo.Alternative.TotalGrammage" value="0" />
+        </td>
+        <td class="text-center">
+          <span class="sum-price" data-row="alt">۰</span>
+          <input type="hidden" name="PaperCombo.Alternative.TotalPrice" value="0" />
+        </td>
+      </tr>
+    `;
+
+    wireEventsAndTotals();
+  }
+
+  // ===== محاسبه مجموع‌ها برای هر ردیف =====
+  async function wireEventsAndTotals(){
+    const all = await loadPapers();
+    function findPaperById(id){ return all.find(x => x.id === id); }
+
+    function calcRowTotals(tr){
+      let gSum = 0, pSum = 0;
+
+      tr.querySelectorAll('select.paper-select').forEach(sel => {
+        const pid = parseInt(sel.value, 10);
+        if (!pid) return;
+        const p = findPaperById(pid);
+        if (!p) return;
+
+        // گرماژ
+        let g = 0;
+        if (p.grammages && p.grammages.length) g = Number(p.grammages[0]) || 0;
+        else {
+          const dg = (sel.selectedOptions[0]?.dataset?.grams || '').split(',').map(Number).filter(v=>!isNaN(v));
+          if (dg.length) g = dg[0];
         }
-        function reRenderFluteIfNeeded(){ if(fluteSelect?.value){ renderPaperTable(fluteSelect.value); } }
-        window.reRenderFluteIfNeeded = reRenderFluteIfNeeded; // در اختیار جدول عرض‌ها
+        gSum += g;
 
-        const FLUTE_COLS={
-          'C':['رویه','لایه میانی','فلوت C','زیره'],
-          'B':['رویه','لایه میانی','فلوت B','زیره'],
-          'E':['رویه','لایه میانی','فلوت E','زیره'],
-          'CB':['رویه','فلوت B/E','لایه میانی','فلوت C','زیره'],
-          'CE':['رویه','فلوت B/E','لایه میانی','فلوت C','زیره'],
-          'BE':['رویه','فلوت B/E','لایه میانی','فلوت C','زیره']
-        };
-        function colKeys(t){
-          switch(t){
-            case 'C': return ['top','mid','flute_c','bottom'];
-            case 'B': return ['top','mid','flute_b','bottom'];
-            case 'E': return ['top','mid','flute_e','bottom'];
-            case 'CB': case 'CE': case 'BE': return ['top','flute_be','mid','flute_c','bottom'];
-            default: return [];
-          }
-        }
-        const esc=s=>(s??'').toString().replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+        // مبلغ
+        pSum += Number(p.price || 0);
+      });
 
-        // فیلتر کاغذها براساس عرض صنعتی انتخاب‌شده (Cat=1)
-        function filterPapersByIndustrialWidth(){
-            const selW = (typeof window.getSelectedIndustrialWidth==='function') ? window.getSelectedIndustrialWidth() : null;
-            if(!selW) return PAPERS;
-            return PAPERS.filter(p=>{
-                const widths=(p.widths||[]).map(Number).filter(v=>!isNaN(v));
-                return widths.some(v=>v>=selW);
-            });
-        }
+      tr.querySelector('.sum-gram').textContent  = toFa(gSum);
+      tr.querySelector('.sum-price').textContent = toFa(pSum);
+      const hidG = tr.querySelector('input[name$=".TotalGrammage"]');
+      const hidP = tr.querySelector('input[name$=".TotalPrice"]');
+      if (hidG) hidG.value = gSum;
+      if (hidP) hidP.value = pSum;
+    }
 
-        // رندر جدول با ۳ ستون برای هر لایه (کاغذ/گرماژ/مبلغ)
-        function renderPaperTable(t){
-          headEl.innerHTML=''; bodyEl.innerHTML='';
-          if(!t || !FLUTE_COLS[t]) return;
+    function recalcAll(){
+      document.querySelectorAll('#paperComboBody tr[data-row]').forEach(calcRowTotals);
+    }
 
-          const cols=FLUTE_COLS[t], keys=colKeys(t);
-          // Header دوبل
-          let h1=`<tr><th class="text-center" rowspan="2" style="min-width:160px">ردیف</th>`;
-          cols.forEach(c=>{ h1+=`<th class="text-center" colspan="3">${c}</th>`; }); h1+='</tr>';
-          let h2='<tr>'; cols.forEach(()=>{ h2+='<th class="text-center">کاغذ</th><th class="text-center">گرماژ</th><th class="text-center">مبلغ</th>';}); h2+='</tr>';
-          headEl.innerHTML=h1+h2;
+    // ایونت تغییر انتخاب‌ها
+    document.querySelectorAll('#paperComboBody select.paper-select').forEach(sel => {
+      sel.addEventListener('change', () => calcRowTotals(sel.closest('tr')));
+    });
 
-          function buildThreeTDs(namePrefix){
-              const filtered=filterPapersByIndustrialWidth();
-              const paperOpts = filtered.map(p=>`<option value="${p.id}" data-price="${+p.price||0}">${esc(p.name)}</option>`).join('');
-              return `
-                <td>
-                  <select class="form-select form-select-sm paper-select" name="${namePrefix}.PaperId">
-                    <option value="">-- انتخاب کاغذ --</option>${paperOpts}
-                  </select>
-                </td>
-                <td>
-                  <select class="form-select form-select-sm gram-select" name="${namePrefix}.Grammage" disabled>
-                    <option value="">-- گرماژ --</option>
-                  </select>
-                </td>
-                <td>
-                  <input type="number" step="0.01" min="0" class="form-control form-control-sm price-input" name="${namePrefix}.Price" placeholder="مبلغ" />
-                </td>`;
-          }
+    // محاسبه اولیه
+    recalcAll();
+  }
 
-          // سطر: ترکیب اصلی
-          let main=`<tr><th class="text-center">ترکیب اصلی</th>`;
-          keys.forEach(k=>{ main+=buildThreeTDs(`PaperCombo.Main.${k}`); });
-          main+='</tr>';
+  // ===== اتصال با بقیه صفحه =====
+  setFluteVisibility();
+  window.reRenderFluteIfNeeded = async function(){
+    if (fluteSelect?.value) await renderPaperTable(fluteSelect.value);
+  };
+  fluteSelect?.addEventListener('change', async function(){
+    if(!isRegular()) return;
+    hidFluteType.value = this.value || '';
+    await renderPaperTable(this.value);
+  });
 
-          // سطر: جایگزین
-          let alt=`<tr><th class="text-center">درصورت استفاده از کاغذهای جایگزین مشخص فرمایید</th>`;
-          keys.forEach(k=>{ alt+=buildThreeTDs(`PaperCombo.Alternative.${k}`); });
-          alt+='</tr>';
+  document.addEventListener('productType:modeChanged', () => {
+    setFluteVisibility();
+    if (!isRegular()) {
+      headEl.innerHTML=''; bodyEl.innerHTML='';
+      hidFluteType.value = '';
+    }
+  });
+})();
+    </script>
+    <script>
+        (function () {
+            const $ = s => document.querySelector(s);
+            const val = s => { const el = $(s); if (!el) return null; if (el.type === 'number') { const v = parseFloat((el.value || '').toString().replace(',', '.')); return isNaN(v) ? null : v; } return (el.value || '').trim(); };
+            const rVal = n => { const el = document.querySelector(`input[name="${n}"]:checked`); return el ? el.value : null; };
 
-          bodyEl.innerHTML=main+alt;
+            async function sendInquiry() {
+                const ddl = document.getElementById('J_ID_Customer') || document.querySelector('[name="J_ID_Customer"]');
+                const payload = {
+                    J_ID_Customer: ddl ? parseInt(ddl.value || '0', 10) || null : null,
+                    CustomerName: ddl?.selectedOptions?.[0]?.textContent?.trim() || null,
+                    Number_Order: val('[name="Number_order"]') || val('#Number_order') || '',
+                    Date: val('[name="Date"]') || val('#Date') || '',
 
-          // ایونت‌ها
-          wirePaperEvents(bodyEl);
-        }
+                    Product_Code: val('[name="Product.Code"]'),
+                    Product_Type: val('#productType'),
+                    Product_Name: val('[name="Product.Name"]'),
+                    Product_Tirage: (function () { const v = val('#tirage'); return v == null ? null : parseInt(v, 10); })(),
+                    Product_Desc: val('[name="Product.Description"]'),
+                    Layers_Count: rVal('Product.Layers'),
+                    Pieces_Count: rVal('Product.Pieces'),
+                    Door_Type: val('#doorOption'),
+                    LengthCm: val('#lengthCm'),
+                    WidthCm: val('#widthCm'),
+                    HeightCm: val('#heightCm')
+                };
 
-        function wirePaperEvents(scope){
-            scope.querySelectorAll('.paper-select').forEach(sel=>{
-                sel.addEventListener('change',function(){
-                    const cell=this.closest('td');
-                    const gram = cell.nextElementSibling?.querySelector('.gram-select');
-                    const price = cell.nextElementSibling?.nextElementSibling?.querySelector('.price-input');
-                    const pid=parseInt(this.value,10);
-                    const p = PAPERS.find(x=>x.id===pid);
+                if (!payload.Product_Type || payload.Product_Type.toLowerCase() === 'regular') {
+                    alert('برای استعلام باید نوع کارتن غیر از «معمولی» باشد.'); return;
+                }
+                if (!payload.J_ID_Customer && !payload.CustomerName) {
+                    alert('لطفاً مشتری را انتخاب کنید.'); return;
+                }
 
-                    if(price){
-                        const defaultPrice = parseFloat(this.selectedOptions[0]?.dataset?.price||'0');
-                        price.value = isNaN(defaultPrice)? '' : defaultPrice;
-                    }
-
-                    if(gram){
-                        gram.innerHTML = `<option value="">-- گرماژ --</option>`;
-                        if(p && Array.isArray(p.grammages)){
-                            const grams = p.grammages.map(Number).filter(v=>!isNaN(v)).sort((a,b)=>a-b);
-                            grams.forEach(g=>{
-                                const opt=document.createElement('option'); opt.value=g; opt.textContent=g;
-                                gram.appendChild(opt);
-                            });
-                            gram.disabled=false;
-                        }else{
-                            gram.disabled=true;
-                        }
-                    }
+                const res = await fetch('/api/inquiry', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
                 });
-            });
-        }
+                const data = await res.json().catch(() => ({}));
+//if (!res.ok || !data.ok) { alert(data.message || 'خطا در ثبت استعلام'); return; }
 
-        // hookup
-        setFluteVisibility();
-        fluteSelect?.addEventListener('change',function(){
-            hidFluteType.value=this.value||'';
-            renderPaperTable(this.value);
-        });
-    })();
+                if (!res.ok) {
+                    console.error('Inquiry error:', data);
+                    const errs = (data && data.errors) ? '\n- ' + data.errors.join('\n- ') : '';
+                    alert((data.message || 'خطای اعتبارسنجی') + errs);
+                    return;
+                }
+                alert('ثبت شد. شماره سفارش: ' + (data.orderId || '?'));
+               // alert('استعلام ثبت شد. شماره سفارش: ' + data.orderId);
+                // window.location.href = '/Orders/Details/' + data.orderId; // اگر خواستی
+            }
+
+            document.getElementById('btnInquiry')?.addEventListener('click', () => sendInquiry().catch(() => alert('اشکال در ارتباط با سرور')));
+        })();
     </script>
 
-    <!-- (اختیاری) دمو فراخوانی API شما؛ خطا نمی‌دهد اگر Endpoint موجود نباشد -->
-    <script>
-    (async function(){
-      try{
-        const all = await fetch('@Url.Action("GetAll","Papers")').then(r=>r.ok?r.json():null);
-        if(all?.ok){ console.log('papers', all.data); }
-      }catch(e){}
-      try{
-        const minW = 110;
-        const filtered = await fetch('@Url.Action("GetFiltered","Papers")?minIndustrialWidth='+minW).then(r=>r.ok?r.json():null);
-        if(filtered){ console.log('filtered', filtered); }
-      }catch(e){}
-    })();
-    </script>
 }
+```

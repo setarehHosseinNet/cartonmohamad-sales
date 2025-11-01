@@ -1,20 +1,23 @@
-﻿using System;
+﻿using cartonmohamad_sales.Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Drawing.Printing;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
+using cartonmohamad_sales.ViewModels;
+
 using System.Web.Mvc;
-using cartonmohamad_sales.Models;
 
 namespace cartonmohamad_sales.Controllers
 {
     public class Tb_OrderController : Controller
     {
         private CartonMohamad_PriceEntities db = new CartonMohamad_PriceEntities();
-
+        private const int PAGE_SIZE = 20;
         [HttpGet]
         public async Task<ActionResult> Index(int? customerId)
         {
@@ -83,7 +86,7 @@ namespace cartonmohamad_sales.Controllers
 
 
 
-           
+
 
 
 
@@ -167,6 +170,49 @@ namespace cartonmohamad_sales.Controllers
             return RedirectToAction("Index");
         }
 
+
+        // GET: /Tb_Order/Inquiries
+        [HttpGet]
+        public ActionResult Inquiries(string q = null, int page = 1, int pageSize = 20)
+        {
+            var orders = db.Tb_Order
+                           .Include(o => o.Customer)
+                           .Where(o => o.Status == "created"); // «ارسال برای استعلام»
+
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                var qq = q.Trim();
+                orders = orders.Where(o =>
+                    o.Customer.Customer1.Contains(qq) ||
+                    (o.Number_order != null && o.Number_order.ToString().Contains(qq)));
+            }
+
+            var total = orders.Count();
+            var rows = orders.OrderByDescending(o => o.Date)
+                             .Skip((page - 1) * pageSize)
+                             .Take(pageSize)
+                             .Select(o => new InqRowVM
+                             {
+                                 OrderId =(int) o.ID,
+                                 CustomerName = o.Customer.Customer1,
+                                 NumberOrder = (o.Number_order == null ? "-" : o.Number_order.ToString()),
+                                 Date = o.Date ?? DateTime.Now,
+                                 Status = o.Status
+                             })
+                             .ToList();
+
+            var vm = new InquiriesVM
+            {
+                Page = page,
+                PageSize = pageSize,
+                Total = total,
+                Q = q,
+                Items = rows
+            };
+
+            return View(vm); // به ویوی همنام برمی‌گردیم
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -176,4 +222,27 @@ namespace cartonmohamad_sales.Controllers
             base.Dispose(disposing);
         }
     }
+
+    public class InquiriesVM
+    {
+        public int Page { get; set; }
+        public int PageSize { get; set; }
+        public int Total { get; set; }
+        public string Q { get; set; }
+        public string From { get; set; }
+        public string To { get; set; }
+        public System.Collections.Generic.List<InqRowVM> Items { get; set; }
+    }
+
+    public class InqRowVM
+    {
+        public int OrderId { get; set; }
+        public object NumberOrder { get; set; } // ممکن است int یا string باشد
+        public DateTime Date { get; set; }
+        public string CustomerName { get; set; }
+        public string Status { get; set; }
+    }
+
+
+
 }

@@ -1,21 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿// App_Start/WebApiConfig.cs
 using System.Web.Http;
+using Newtonsoft.Json;
 
-namespace cartonmohamad_sales
+public static class WebApiConfig
 {
-    public static class WebApiConfig
+    public static void Register(HttpConfiguration config)
     {
-        public static void Register(HttpConfiguration config)
-        {
-            config.MapHttpAttributeRoutes();
+        // فقط JSON
+        config.Formatters.Remove(config.Formatters.XmlFormatter);
+        config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling =
+            ReferenceLoopHandling.Ignore;
 
-            config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
-        }
+        config.MapHttpAttributeRoutes();
+
+        // مسیر پیش‌فرض api
+        config.Routes.MapHttpRoute(
+            name: "DefaultApi",
+            routeTemplate: "api/{controller}/{id}",
+            defaults: new { id = RouteParameter.Optional }
+        );
     }
 }
