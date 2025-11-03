@@ -1,4 +1,25 @@
 ﻿@model IEnumerable<cartonmohamad_sales.Models.Tb_Order>
+@using System.Globalization
+
+@{
+    var pc = new PersianCalendar();
+    Func<DateTime?, string> ToShamsi = dt =>
+    {
+        if (!dt.HasValue) return "—";
+
+        var d = dt.Value;
+
+        // بازه مجاز PersianCalendar
+        var min = new DateTime(622, 3, 22, 0, 0, 0, DateTimeKind.Unspecified);
+        var max = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Unspecified);
+
+        if (d < min || d > max) return "—";
+
+        return string.Format("{0:0000}/{1:00}/{2:00}",
+            pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d));
+    };
+}
+
 @{
     ViewBag.Title = "سفارش‌ها / فاکتورها";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -59,13 +80,13 @@
     @* اگر از قبل در آدرس فیلتر مشتری داشتیم، چیپِ فیلتر نشان بده *@
     @if (filteredCustomerId.HasValue)
     {
-        <div class="alert alert-light d-flex align-items-center gap-2 border mb-3">
-            <span>فیلتر بر اساس مشتری:</span>
-            <span class="badge bg-primary">@filteredCustomerName (@filteredCustomerId)</span>
-            <a class="ms-auto btn btn-sm btn-outline-secondary" href="@Url.Action("Index", "Tb_Order")">
-                حذف فیلتر
-            </a>
-        </div>
+    <div class="alert alert-light d-flex align-items-center gap-2 border mb-3">
+        <span>فیلتر بر اساس مشتری:</span>
+        <span class="badge bg-primary">@filteredCustomerName (@filteredCustomerId)</span>
+        <a class="ms-auto btn btn-sm btn-outline-secondary" href="@Url.Action("Index", "Tb_Order")">
+            حذف فیلتر
+        </a>
+    </div>
     }
 
     <div class="card shadow-sm">
@@ -88,37 +109,37 @@
                         {
                             foreach (var item in Model)
                             {
-                                <tr>
-                                    <td class="searchable text-center">@item.Number_order</td>
-                                    <td class="searchable text-center">@item.J_ID_Facktor</td>
-                                    <td class="searchable text-center">@item.Number_ORder_rahkaran</td>
-                                    <td class="searchable text-center">
-                                        @{
+                        <tr>
+                            <td class="searchable text-center">@item.Number_order</td>
+                            <td class="searchable text-center">@item.J_ID_Facktor</td>
+                            <td class="searchable text-center">@item.Number_ORder_rahkaran</td>
+                            <td class="searchable text-center">
+                                @{
                                             var st = (item.Status ?? "").Trim();
-                                        }
-                                        <span class="badge @StatusClass(st)">@st</span>
-                                    </td>
-                                    <td class="searchable text-center">
-                                        @ToShamsi(item.Date)
-                                    </td>
-                                    <td class="searchable">
-                                        @item.Customer?.Customer1
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="btn-group btn-group-sm">
-                                            @Html.ActionLink("ویرایش", "Edit", new { id = item.ID }, new { @class = "btn btn-outline-primary" })
-                                            @Html.ActionLink("جزئیات", "Details", new { id = item.ID }, new { @class = "btn btn-outline-secondary" })
-                                            @Html.ActionLink("حذف", "Delete", new { id = item.ID }, new { @class = "btn btn-outline-danger" })
-                                        </div>
-                                    </td>
-                                </tr>
+                                }
+                                <span class="badge @StatusClass(st)">@st</span>
+                            </td>
+                            <td class="searchable text-center">
+                                @ToShamsi(item.Date)
+                            </td>
+                            <td class="searchable">
+                            @Html.DisplayFor(m => item.Customer.Customer1)
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group btn-group-sm">
+                                    @Html.ActionLink("ویرایش", "Edit", new { id = item.ID }, new { @class = "btn btn-outline-primary" })
+                                    @Html.ActionLink("جزئیات", "Details", new { id = item.ID }, new { @class = "btn btn-outline-secondary" })
+                                    @Html.ActionLink("حذف", "Delete", new { id = item.ID }, new { @class = "btn btn-outline-danger" })
+                                </div>
+                            </td>
+                        </tr>
                             }
                         }
                         else
                         {
-                            <tr>
-                                <td colspan="7" class="text-center text-muted py-4">سفارش/فاکتوری یافت نشد.</td>
-                            </tr>
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-4">سفارش/فاکتوری یافت نشد.</td>
+                        </tr>
                         }
                     </tbody>
                 </table>

@@ -1,17 +1,19 @@
 ﻿@model cartonmohamad_sales.Models.Tb_Order
-
+@using cartonmohamad_sales.Extensions
 @{
     ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@{
+    string dateText = Model?.Date.ToShamsiSafe() ?? "";
+}
 <h2>Edit</h2>
 
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Tb_Order</h4>
         <hr />
@@ -61,7 +63,12 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
+                <input type="text"
+                       name="Date"
+                       id="Date"
+                       class="form-control persian-date"
+                       value="@dateText" />
+                @Html.ValidationMessageFor(m => m.Date, "", new { @class = "text-danger" })
                 @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
             </div>
         </div>
