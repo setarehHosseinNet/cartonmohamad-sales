@@ -1,0 +1,42 @@
+﻿@model cartonmohamad_sales.ViewModels.InquiriesVM
+
+<form class="row g-2 mb-3" method="get">
+    <div class="col-md-3">
+        <input name="q" value="@Model.Q" class="form-control" placeholder="جستجو: مشتری/شماره سفارش">
+    </div>
+    <div class="col-md-2">
+        <input name="from" value="@Model.From" class="form-control" placeholder="از تاریخ (yyyy-mm-dd)">
+    </div>
+    <div class="col-md-2">
+        <input name="to" value="@Model.To" class="form-control" placeholder="تا تاریخ (yyyy-mm-dd)">
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-primary w-100">جستجو</button>
+    </div>
+</form>
+
+<div class="table-responsive">
+    <table class="table table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>کد</th>
+                <th>مشتری</th>
+                <th>شماره سفارش</th>
+                <th>تاریخ</th>
+                <th>وضعیت</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var row in Model.Items)
+            {
+                <tr>
+                    <td>@row.OrderId</td>
+                    <td>@row.CustomerName</td>
+                    <td>@row.NumberOrderText</td>
+                    <td>@row.DateText</td>   @* دیگر ارور ToString(1 arg) نمی‌گیری *@
+                    <td>@row.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
